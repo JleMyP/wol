@@ -28,10 +28,16 @@ try:
     import fabric
 except ImportError:
     fabric = None
-
+else:
+    from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
 __all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
            'scan_local_net']
+
+
+ERROR_NOT_CONNECTED = 0
+ERROR_SSH = 1
+ERROR_EXEC = 2
 
 
 class CpuStatShortBase(NamedTuple):
@@ -96,13 +102,33 @@ class CpuStatShort(CpuStatShortBase, BaseOps):
     pass
 
 
+class RemoteExecError(Exception):
+    def __init__(self, code: int, reason: str, details: Optional[any] = None):
+        self.code = code
+        self.reason = reason
+        self.details = details
+
+    def as_dict(self) -> dict:
+        return {
+            'code': self.code,
+            'reason': self.reason,
+            'details': self.details or {},
+        }
+
+
 if fabric:
     def remote_exec_command(command: str, host: str, login: str, password: str,
                             port: int = 22) -> dict:
-        with fabric.Connection(host, login, port, connect_kwargs={'password': password}) as c:
-            res = c.run(command, warn=True)
+        try:
+            with fabric.Connection(host, login, port, connect_kwargs={'password': password}) as c:
+                res = c.run(command, warn=True)
+        except NoValidConnectionsError:
+            raise RemoteExecError(ERROR_NOT_CONNECTED, "can't connect to host")
+        except SSHException:
+            raise RemoteExecError(ERROR_SSH, "ssh exception")
         if res.exited:
-            raise RemoteExecError(res.exited, res.stdout, res.stderr)
+            raise RemoteExecError(ERROR_EXEC, "can't exec command",
+                                  {'out': res.stdout, 'err': res.stderr})
         as_dict = vars(res)
         as_dict.pop('connection')
         return as_dict
@@ -111,14 +137,8 @@ else:
         raise NotImplementedError
 
 
-class RemoteExecError(Exception):
-    def __init__(self, exit_code: int, out: str, err: str):
-        self.exit_code = exit_code
-        self.out = out
-        self.err = err
-
-
-def get_cpu_stat(host, login, password, port: int = 22, precision: Optional[int] = None) -> CpuStat:
+def get_cpu_stat(host: str, login: str, password: str, port: int = 22,
+                 precision: Optional[int] = None) -> CpuStat:
     cmd = 'head -1 /proc/stat && sleep 1 1>/dev/null && head -1 /proc/stat'
     res = remote_exec_command(cmd, host, login, password, port)
     l1, l2, *_ = res['stdout'].split('\n')
@@ -176,6 +196,16 @@ def reboot_host(host: str, login: str, password: str, port: int = 22):
     remote_exec_command('reboot', host, login, password, port)
 
 
+def scan_local_net() -> List[str]:
+    if not can_use_scapy():
+        raise NotImplementedError
+
+    net = get_net()
+    ans, _ = arping(net)
+    hosts = [r.psrc for _, r in ans.res]
+    return hosts
+
+
 def get_net() -> str:
     for network, netmask, gw, interface, address, _ in scapy.config.conf.route.routes:
         if network == 0 or interface == 'lo' or address == '127.0.0.1' or address == '0.0.0.0':
@@ -190,13 +220,3 @@ def get_net() -> str:
         net = scapy.utils.ltoa(network)
         mask = bin(netmask).count('1')
         return f'{net}/{mask}'
-
-
-def scan_local_net() -> List[str]:
-    if not can_use_scapy():
-        raise NotImplementedError
-
-    net = get_net()
-    ans, _ = arping(net)
-    hosts = [r.psrc for _, r in ans.res]
-    return hosts

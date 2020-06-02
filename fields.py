@@ -1,7 +1,6 @@
 from marshmallow import fields, validate, ValidationError
 from validators import ipv4, ipv6, mac_address, domain
 
-
 __all__ = ['IpAddressField', 'HostField', 'PortField', 'MacField']
 
 

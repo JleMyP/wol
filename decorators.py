@@ -3,7 +3,6 @@ from functools import wraps
 from flask import request
 from marshmallow import Schema
 
-
 __all__ = ['parse_body', 'parse_query']
 
 

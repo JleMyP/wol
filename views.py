@@ -1,10 +1,11 @@
-from flask import jsonify
 from marshmallow import Schema, fields
 
 from app import app
 from decorators import parse_body
 from fields import IpAddressField, HostField, PortField, MacField
-from logic import check_host, reboot_host, get_cpu_stat, SshExecError, wakeup_host, scan_local_net
+from logic import (
+    check_host, reboot_host, get_cpu_stat, wakeup_host, scan_local_net, RemoteExecError,
+)
 
 
 class SshActionSchema(Schema):
@@ -43,14 +44,14 @@ def wake(validated_data: dict):
 def cpu_stat(validated_data: dict):
     try:
         stat = get_cpu_stat(**validated_data, precision=3)
-    except SshExecError as e:
-        return {'out': e.out, 'err': e.err}
+    except RemoteExecError as e:
+        return e.as_dict(), 400
     return stat._asdict()
 
 
 @app.route('/api/scan_net/', methods=['POST'])
 def scan_net():
-    return jsonify(scan_local_net())
+    return {'hosts': scan_local_net()}
 
 
 @app.route('/api/reboot/', methods=['POST'])
@@ -58,6 +59,6 @@ def scan_net():
 def reboot(validated_data: dict):
     try:
         reboot_host(**validated_data)
-    except SshExecError as e:
-        return {'out': e.out, 'err': e.err}
+    except RemoteExecError as e:
+        return e.as_dict(), 400
     return '', 204
