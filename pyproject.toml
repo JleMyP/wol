@@ -18,6 +18,17 @@ scapy = "^2.4.3"
 [tool.poetry.dev-dependencies]
 ipython = "^7.5"
 pytest = "^3.0"
+flake8-isort = "^3.0.0"
+flake8-bandit = "^2.1.2"
+flake8-bugbear = "^20.1.4"
+flake8-builtins = "^1.5.3"
+flake8-variables-names = "^0.0.3"
+
+[tool.isort]
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 4
 
 [build-system]
 requires = ["poetry>=1.0"]

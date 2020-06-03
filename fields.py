@@ -1,5 +1,10 @@
-from marshmallow import fields, validate, ValidationError
-from validators import ipv4, ipv6, mac_address, domain
+from marshmallow import ValidationError, fields, validate
+from validators import (
+    domain,
+    ipv4,
+    ipv6,
+    mac_address,
+)
 
 __all__ = ['IpAddressField', 'HostField', 'PortField', 'MacField']
 
@@ -38,5 +43,5 @@ def add_validators(name, base, validators):
 
 IpAddressField = add_validators('IpAddressField', fields.String, [validate_ip])
 HostField = add_validators('HostField', fields.String, [validate_host])
-PortField = add_validators('PortField', fields.Integer, [validate.Range(min=0, max=2**16-1)])
+PortField = add_validators('PortField', fields.Integer, [validate.Range(min=0, max=2**16 - 1)])
 MacField = add_validators('MacField', fields.String, [validate_mac])

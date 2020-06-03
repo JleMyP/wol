@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from app import app
-import views  # noqa
+import views  # noqa isort:skip
 
 
 if __name__ == '__main__':

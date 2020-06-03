@@ -2,9 +2,19 @@ from marshmallow import Schema, fields
 
 from app import app
 from decorators import parse_body
-from fields import IpAddressField, HostField, PortField, MacField
+from fields import (
+    HostField,
+    IpAddressField,
+    MacField,
+    PortField,
+)
 from logic import (
-    check_host, reboot_host, get_cpu_stat, wakeup_host, scan_local_net, RemoteExecError,
+    RemoteExecError,
+    check_host,
+    get_cpu_stat,
+    reboot_host,
+    scan_local_net,
+    wakeup_host,
 )
 
 

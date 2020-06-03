@@ -1,16 +1,21 @@
 import operator
 import os
 import subprocess
+from numbers import Number
+from typing import (
+    Callable,
+    Iterable,
+    List,
+    NamedTuple,
+    Optional,
+)
+
+from wakeonlan import send_magic_packet
 
 try:
     from functools import singledispatchmethod
 except ImportError:
     from singledispatchmethod import singledispatchmethod
-
-from numbers import Number
-from typing import List, Callable, Iterable, Optional, NamedTuple
-
-from wakeonlan import send_magic_packet
 
 try:
     import scapy
@@ -88,8 +93,8 @@ class BaseOps(NamedTuple):
     def __truediv__(self, other):
         return self._do_op(other, operator.truediv)
 
-    def __round__(self, n: Optional[int] = None):
-        return self._do_op(n, round)
+    def __round__(self, num: Optional[int] = None):
+        return self._do_op(num, round)
 
 
 class CpuStat(CpuStatBase, BaseOps):
@@ -167,7 +172,7 @@ def check_host(host: str) -> bool:
 
 
 def check_host_scapy(host: str) -> bool:
-    packet = IP(host)/TCP()
+    packet = IP(host) / TCP()
     response = sr1(packet)
     return response is not None
 
@@ -207,8 +212,8 @@ def scan_local_net() -> List[str]:
 
 
 def get_net() -> str:
-    for network, netmask, gw, interface, address, _ in scapy.config.conf.route.routes:
-        if network == 0 or interface == 'lo' or address == '127.0.0.1' or address == '0.0.0.0':
+    for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
+        if (network == 0 or interface == 'lo' or address in ('127.0.0.1', '0.0.0.0')):  # noqa: S104
             continue
         if netmask <= 0 or netmask == 0xFFFFFFFF:
             continue

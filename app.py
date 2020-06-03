@@ -1,7 +1,7 @@
 import logging
 from sys import stdout
 
-from flask import Flask, jsonify, Response
+from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
 log = logging.getLogger(__name__)
