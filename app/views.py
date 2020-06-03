@@ -1,14 +1,14 @@
 from marshmallow import Schema, fields
 
-from app import app
-from decorators import parse_body
-from fields import (
+from . import app
+from .decorators import parse_body
+from .fields import (
     HostField,
     IpAddressField,
     MacField,
     PortField,
 )
-from logic import (
+from .logic import (
     RemoteExecError,
     check_host,
     get_cpu_stat,
