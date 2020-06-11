@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from configargparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
 from app import app, views  # noqa
-
 
 parser = ArgumentParser(
     auto_env_var_prefix='WOL_',

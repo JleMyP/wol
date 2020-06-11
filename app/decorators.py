@@ -1,6 +1,5 @@
-from typing import Callable
-
 from functools import wraps
+from typing import Callable
 
 from flask import request
 from marshmallow import Schema
