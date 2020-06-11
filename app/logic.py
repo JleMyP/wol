@@ -100,7 +100,7 @@ class BaseOps(NamedTuple):
 class CpuStat(CpuStatBase, BaseOps):
     def short(self):
         return CpuStatShort(user=self.user + self.nice, system=self.system,
-                            idle=self.idle, iowait=self.iowait)
+                            idle=self.idle, iowait=self.iowait)  # noqa  # TODO: charm, wtf?
 
 
 class CpuStatShort(CpuStatShortBase, BaseOps):
@@ -144,6 +144,7 @@ else:
 
 def get_cpu_stat(host: str, login: str, password: str, port: int = 22,
                  precision: Optional[int] = None) -> CpuStat:
+    # TODO: describe the algorithm
     cmd = 'head -1 /proc/stat && sleep 1 1>/dev/null && head -1 /proc/stat'
     res = remote_exec_command(cmd, host, login, password, port)
     l1, l2, *_ = res['stdout'].split('\n')
@@ -172,6 +173,7 @@ def check_host(host: str) -> bool:
 
 
 def check_host_scapy(host: str) -> bool:
+    """check by SYN/ACK to 80 port."""
     packet = IP(host) / TCP()
     response = sr1(packet)
     return response is not None
@@ -202,6 +204,7 @@ def reboot_host(host: str, login: str, password: str, port: int = 22):
 
 
 def scan_local_net() -> List[str]:
+    """get hosts from local net by ARP protocol."""
     if not can_use_scapy():
         raise NotImplementedError
 
@@ -212,8 +215,9 @@ def scan_local_net() -> List[str]:
 
 
 def get_net() -> str:
+    """find network interface/mask, that has access to the Internet."""
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
-        if (network == 0 or interface == 'lo' or address in ('127.0.0.1', '0.0.0.0')):  # noqa: S104
+        if network == 0 or interface == 'lo' or address in ('127.0.0.1', '0.0.0.0'):  # noqa: S104
             continue
         if netmask <= 0 or netmask == 0xFFFFFFFF:
             continue

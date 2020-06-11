@@ -37,23 +37,26 @@ class CheckHostSchema(Schema):
 
 @app.route('/api/check_host/', methods=['POST'])
 @parse_body(CheckHostSchema())
-def ping(validated_data: dict):
-    reached = check_host(**validated_data)
+def ping(body: dict):
+    """check, if host online."""
+    reached = check_host(**body)
     return {'reached': reached}
 
 
 @app.route('/api/wake/', methods=['POST'])
 @parse_body(WakeupSchema())
-def wake(validated_data: dict):
-    wakeup_host(**validated_data)
+def wake(body: dict):
+    """wakeup host by Wale on lan."""
+    wakeup_host(**body)
     return '', 204
 
 
 @app.route('/api/cpu_stat/', methods=['POST'])
 @parse_body(SshActionSchema())
-def cpu_stat(validated_data: dict):
+def cpu_stat(body: dict):
+    """cpu load of remote host (ssh)."""
     try:
-        stat = get_cpu_stat(**validated_data, precision=3)
+        stat = get_cpu_stat(**body, precision=3)
     except RemoteExecError as e:
         return e.as_dict(), 400
     return stat._asdict()
@@ -61,14 +64,16 @@ def cpu_stat(validated_data: dict):
 
 @app.route('/api/scan_net/', methods=['POST'])
 def scan_net():
+    """search all hosts in local net."""
     return {'hosts': scan_local_net()}
 
 
 @app.route('/api/reboot/', methods=['POST'])
 @parse_body(SshActionSchema())
-def reboot(validated_data: dict):
+def reboot(body: dict):
+    """reboot the remote host (ssh)."""
     try:
-        reboot_host(**validated_data)
+        reboot_host(**body)
     except RemoteExecError as e:
         return e.as_dict(), 400
     return '', 204

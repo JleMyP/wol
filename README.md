@@ -1,5 +1,5 @@
 # wol
-wake on lan and some useful stuff as web service
+wake on lan and some useful stuff as web service.
 
 ## install
 
@@ -11,20 +11,21 @@ poetry install
 ## launch
 
 ```bash
-poetry run main.py
+poetry run python main.py
 ```
 
-default listen address - 0.0.0.0:5000
+to get command-line arguments type `poetry run python main.py -h`.  
+default listen address - `127.0.0.1:5000`.
 
 ## usage
 
 **api**  
-`*` - required parameter  
-body and response format - json
+`*` - required parameter,  
+body and response format - json.
 
-`POST /api/check_host/` - check, if host online  
+`POST /api/check_host/` - check, if host online.  
 body parameters:
-* *`host` - (*string*) ip address or hostname of remote host
+* *`host` - (*string*) ip address or hostname of remote host.
 
 example:
   ```json
@@ -34,13 +35,13 @@ example:
   ```
 
 response fields:
-* `reached` - (*bool*) is remote host online
+* `reached` - (*bool*) is a remote host online.
 
-`POST /api/wake/` - wakeup host by Wale on lan  
+`POST /api/wake/` - wakeup host by Wale on lan.  
 body parameters:
-* *`mac` - (*string*) mac address of remote host
-* `ip_address` - (*string*) remote host address. default - `"255.255.255.255"`
-* `port` - (*int*) wake on lan port. default - 9
+* *`mac` - (*string*) mac address of remote host;
+* `ip_address` - (*string*) remote host address. default - `"255.255.255.255"`;
+* `port` - (*int*) wake on lan port. default - 9.
 
 example:
   ```json
@@ -52,12 +53,12 @@ example:
   ```
 
 `POST /api/cpu_stat/` - cpu load of remote host (ssh)
-http://www.linuxhowtos.org/manpages/5/proc.htm  
+http://www.linuxhowtos.org/manpages/5/proc.htm.  
 body parameters:
-* *`host` - (*string*) 
-* `port` - (*int*) . default - 22
-* *`login` - (*string*)
-* *`password` - (*string*) 
+* *`host` - (*string*) ip address or hostname of remote host;
+* `port` - (*int*) ssh port. default - 22;
+* *`login` - (*string*) ssh login;
+* *`password` - (*string*) ssh password.
 
 example:
   ```json
@@ -69,27 +70,27 @@ example:
   ```
 
 response fields:
-* `user` - (*number*) time spent in user mode
-* `nice` - (*number*) time spent in user mode with low priority (nice)
-* `system` - (*number*) time spent in system mode
-* `idle` - (*number*) time spent in the idle task
-* `iowait` - (*number*) time waiting for I/O to complete
-* `irq` - (*number*) time servicing interrupts
-* `softirq` - (*number*) time servicing softirqs
-* `steal` - (*number*) stolen time, which is the time spent in other operating systems when running in a virtualized environment
-* `guest` - (*number*) time spent running a virtual CPU for guest operating systems under the control of the Linux kernel
-* `guest_nice` - (*number*) time spent running a niced guest
+* `user` - (*number*) time spent in user mode;
+* `nice` - (*number*) time spent in user mode with low priority (nice);
+* `system` - (*number*) time spent in system mode;
+* `idle` - (*number*) time spent in the idle task;
+* `iowait` - (*number*) time waiting for I/O to complete;
+* `irq` - (*number*) time servicing interrupts;
+* `softirq` - (*number*) time servicing softirqs;
+* `steal` - (*number*) stolen time, which is the time spent in other operating systems when running in a virtualized environment;
+* `guest` - (*number*) time spent running a virtual CPU for guest operating systems under the control of the Linux kernel;
+* `guest_nice` - (*number*) time spent running a niced guest.
 
-`POST /api/scan_net/` - search all hosts in local net  
+`POST /api/scan_net/` - search all hosts in local net.  
 response fields:
-* `hosts` - (*array[string]*) - list of hosts ip addresses
+* `hosts` - (*array[string]*) - list of hosts ip addresses.
 
-`POST /api/reboot/` - reboot remote host (ssh)  
+`POST /api/reboot/` - reboot a remote host (ssh).  
 body parameters:
-* *`host` - (*string*) 
-* `port` - (*int*) . default - 22
-* *`login` - (*string*)
-* *`password` - (*string*) 
+* *`host` - (*string*) ip address or hostname of remote host;
+* `port` - (*int*) ssh port. default - 22;
+* *`login` - (*string*) ssh login;
+* *`password` - (*string*) ssh password.
 
 example:
   ```json
@@ -99,13 +100,17 @@ example:
     "password": "WeRySeCrEtPaSsWoRd"
   }
   ```
+
+---
 
 ## todo
 
-* config from cmd / env / file
-* local store hosts and their credentials
-* history of operations
+* local store
+  * hosts and their credentials
+* ssh pkey
 * access control
 * openapi doc
 * docker?
 * extend functionality
+* browsable interface
+* tests
