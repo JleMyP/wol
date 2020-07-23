@@ -8,14 +8,21 @@ pip install poetry
 poetry install
 ```
 
-## launch
+## dev launch
 
 ```bash
 poetry run python main.py
 ```
 
-to get command-line arguments type `poetry run python main.py -h`.  
-default listen address - `127.0.0.1:5000`.
+to get command-line arguments type `python main.py -h`.  
+
+**arguments**  
+* `--bind`, `-b` - listen interface address. default - 127.0.0.1;  
+* `--port`, `-p` - listen port. default - 5000;  
+* `--debug`, `-d` - run in debug mode. default - false.  
+
+arguments also can be passed through env vars prefixed by `WOL_`, example - `WOL_PORT=3000 python main.py`.  
+
 
 ## usage
 
@@ -25,7 +32,7 @@ body and response format - json.
 
 `POST /api/check_host/` - check, if host online.  
 body parameters:
-* *`host` - (*string*) ip address or hostname of remote host.
+* \*`host` - (*string*) ip address or hostname of remote host.
 
 example:
   ```json
@@ -39,7 +46,7 @@ response fields:
 
 `POST /api/wake/` - wakeup host by Wale on lan.  
 body parameters:
-* *`mac` - (*string*) mac address of remote host;
+* \*`mac` - (*string*) mac address of remote host;
 * `ip_address` - (*string*) remote host address. default - `"255.255.255.255"`;
 * `port` - (*int*) wake on lan port. default - 9.
 
@@ -55,10 +62,10 @@ example:
 `POST /api/cpu_stat/` - cpu load of remote host (ssh)
 http://www.linuxhowtos.org/manpages/5/proc.htm.  
 body parameters:
-* *`host` - (*string*) ip address or hostname of remote host;
+* \*`host` - (*string*) ip address or hostname of remote host;
 * `port` - (*int*) ssh port. default - 22;
-* *`login` - (*string*) ssh login;
-* *`password` - (*string*) ssh password.
+* \*`login` - (*string*) ssh login;
+* \*`password` - (*string*) ssh password.
 
 example:
   ```json
@@ -87,10 +94,10 @@ response fields:
 
 `POST /api/reboot/` - reboot a remote host (ssh).  
 body parameters:
-* *`host` - (*string*) ip address or hostname of remote host;
+* \*`host` - (*string*) ip address or hostname of remote host;
 * `port` - (*int*) ssh port. default - 22;
-* *`login` - (*string*) ssh login;
-* *`password` - (*string*) ssh password.
+* \*`login` - (*string*) ssh login;
+* \*`password` - (*string*) ssh password.
 
 example:
   ```json
@@ -105,12 +112,21 @@ example:
 
 ## todo
 
+functionality:
 * local store
   * hosts and their credentials
 * ssh pkey
 * access control
-* openapi doc
-* docker?
-* extend functionality
+* wakeup by schedule
+  * celery? where to store configs?
+* mass operations: check host, wakeup
 * browsable interface
+
+operability:
+* gunicorn
+* in-app openapi doc
+* healthcheck
 * tests
+  * ci
+* docker?
+  * cd
