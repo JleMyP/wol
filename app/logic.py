@@ -130,7 +130,7 @@ if fabric:
         except NoValidConnectionsError:
             raise RemoteExecError(ERROR_NOT_CONNECTED, "can't connect to host")
         except SSHException:
-            raise RemoteExecError(ERROR_SSH, "ssh exception")
+            raise RemoteExecError(ERROR_SSH, 'ssh exception')
         if res.exited:
             raise RemoteExecError(ERROR_EXEC, "can't exec command",
                                   {'out': res.stdout, 'err': res.stderr})

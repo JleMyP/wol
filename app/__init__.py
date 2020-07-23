@@ -4,6 +4,7 @@ from sys import stdout
 from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
+
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler(stdout))
