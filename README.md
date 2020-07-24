@@ -24,6 +24,13 @@ to get command-line arguments type `python main.py -h`.
 arguments also can be passed through env vars prefixed by `WOL_`, example - `WOL_PORT=3000 python main.py`.  
 
 
+## more seriously launch
+
+```
+poetry run gunicorn app:app
+```
+
+
 ## usage
 
 **api**  
