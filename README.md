@@ -37,9 +37,9 @@ poetry run gunicorn app:app
 `*` - required parameter,  
 body and response format - json.
 
-`POST /api/check_host/` - check, if host online.  
+`POST /api/check_host/` - check, if host is online.  
 body parameters:
-* \*`host` - (*string*) ip address or hostname of remote host.
+* \*`host` - (*string*) ip address or hostname of a remote host.
 
 example:
   ```json
@@ -53,7 +53,7 @@ response fields:
 
 `POST /api/wake/` - wakeup host by Wale on lan.  
 body parameters:
-* \*`mac` - (*string*) mac address of remote host;
+* \*`mac` - (*string*) mac address of a remote host;
 * `ip_address` - (*string*) remote host address. default - `"255.255.255.255"`;
 * `port` - (*int*) wake on lan port. default - 9.
 
@@ -66,10 +66,10 @@ example:
   }
   ```
 
-`POST /api/cpu_stat/` - cpu load of remote host (ssh)
+`POST /api/cpu_stat/` - cpu load of a remote host (ssh)
 http://www.linuxhowtos.org/manpages/5/proc.htm.  
 body parameters:
-* \*`host` - (*string*) ip address or hostname of remote host;
+* \*`host` - (*string*) ip address or hostname of a remote host;
 * `port` - (*int*) ssh port. default - 22;
 * \*`login` - (*string*) ssh login;
 * \*`password` - (*string*) ssh password.
@@ -101,7 +101,7 @@ response fields:
 
 `POST /api/reboot/` - reboot a remote host (ssh).  
 body parameters:
-* \*`host` - (*string*) ip address or hostname of remote host;
+* \*`host` - (*string*) ip address or hostname of a remote host;
 * `port` - (*int*) ssh port. default - 22;
 * \*`login` - (*string*) ssh login;
 * \*`password` - (*string*) ssh password.
