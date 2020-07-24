@@ -40,6 +40,8 @@ docker run --rm -ti -p 5000:5000 wol
 
 port can be passed at the build stage - `--build-arg PORT=8000`,
 or at the launch stage - `-e PORT=8000`.  
+default user has no root permissions, so the port can't be less than 1024,
+or you can launch the container with root user - `-u root -e PORT=80`.  
 other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 
 
@@ -140,12 +142,15 @@ functionality:
   * celery? where to store configs?
 * mass operations: check host, wakeup
 * browsable interface
+* configuration
+  * sentry dsn
+  * userless mode
 
 operability:
-* gunicorn
 * in-app openapi doc
 * healthcheck
+  * disable ht logs
+* sentry
 * tests
   * ci
-* docker?
-  * cd
+* github actions - build image
