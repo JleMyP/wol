@@ -1,0 +1,32 @@
+ARG PYTHON_TAG=3.8-alpine3.12
+
+FROM python:$PYTHON_TAG as builder
+
+RUN apk add gcc musl-dev libffi-dev openssl-dev make \
+  && pip install poetry wheel
+COPY pyproject.toml poetry.lock* ./
+RUN mkdir /wheels \
+  && poetry export -f requirements.txt -o /wheels/r.txt --without-hashes \
+  && pip wheel -r /wheels/r.txt -w /wheels
+
+
+FROM python:$PYTHON_TAG
+COPY --from=builder /wheels /wheels
+RUN pip install -r /wheels/r.txt -f /wheels
+WORKDIR /app
+COPY . .
+
+RUN addgroup -S appgroup \
+  && adduser -S appuser -G appgroup
+USER appuser
+
+ARG GIT_COMMIT_SHORT
+ENV GIT_COMMIT_SHORT $GIT_COMMIT_SHORT
+ARG GIT_COMMIT_TITLE
+ENV GIT_COMMIT_TITLE $GIT_COMMIT_TITLE
+
+ARG PORT=5000
+ENV PORT $PORT
+ENV PYTHONUNBUFFERED 1
+
+CMD ["gunicorn", "--access-logfile", "-", "-n", "wol", "app:app"]

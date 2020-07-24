@@ -21,14 +21,26 @@ to get command-line arguments type `python main.py -h`.
 * `--port`, `-p` - listen port. default - 5000;  
 * `--debug`, `-d` - run in debug mode. default - false.  
 
-arguments also can be passed through env vars prefixed by `WOL_`, example - `WOL_PORT=3000 python main.py`.  
+arguments also can be passed through env vars prefixed by `WOL_`,
+example - `WOL_PORT=3000 python main.py`.  
 
 
 ## more seriously launch
 
 ```
-poetry run gunicorn app:app
+poetry run gunicorn --access-logfile - app:app
 ```
+
+## docker launch
+
+```bash
+docker build -t wol -f docker/Dockerfile-prod .
+docker run --rm -ti -p 5000:5000 wol
+```
+
+port can be passed at the build stage - `--build-arg PORT=8000`,
+or at the launch stage - `-e PORT=8000`.  
+other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 
 
 ## usage
