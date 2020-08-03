@@ -13,9 +13,9 @@ def parse_body(schema: Schema) -> DECORATOR_TYPE:
     """parse the request json body according to the specified scheme."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapped():
+        def wrapped(*args, **kwargs):
             data = schema.load(request.get_json())
-            return func(body=data)
+            return func(*args, **kwargs, body=data)
         return wrapped
     return decorator
 
@@ -24,8 +24,8 @@ def parse_query(schema: Schema) -> DECORATOR_TYPE:
     """parse the request query parameters according to the specified scheme."""
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapped():
+        def wrapped(*args, **kwargs):
             data = schema.load(request.args)
-            return func(query=data)
+            return func(*args, **kwargs, query=data)
         return wrapped
     return decorator

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+
 from app import app, views  # noqa
 
 parser = ArgumentParser(

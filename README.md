@@ -134,8 +134,6 @@ example:
 ## todo
 
 functionality:
-* local store
-  * hosts and their credentials
 * ssh pkey
 * access control
 * wakeup by schedule

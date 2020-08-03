@@ -1,3 +1,4 @@
+from flask import jsonify
 from marshmallow import Schema, fields
 
 from . import app
@@ -10,11 +11,19 @@ from .fields import (
 )
 from .logic import (
     RemoteExecError,
+    TargetSchema,
     check_host,
+    check_target_by_id,
+    create_target,
+    delete_target_by_id,
+    edit_target_by_id,
+    get_all_targets,
     get_cpu_stat,
+    get_target_by_id,
     reboot_host,
     scan_local_net,
     wakeup_host,
+    wakeup_target_by_id,
 )
 
 
@@ -77,3 +86,45 @@ def reboot(body: dict):
     except RemoteExecError as e:
         return e.as_dict(), 400
     return '', 204
+
+
+@app.route('/api/targets/', methods=['GET'])
+def get_targets():
+    return jsonify(get_all_targets())
+
+
+@app.route('/api/targets/', methods=['POST'])
+@parse_body(TargetSchema())
+def create_target_(body: dict):
+    created = create_target(**body)
+    return {'id': created}, 201
+
+
+@app.route('/api/targets/<int:pk>/', methods=['GET'])
+def get_target(pk: int):
+    return get_target_by_id(pk)
+
+
+@app.route('/api/targets/<int:pk>/', methods=['PUT', 'PATCH'])
+@parse_body(TargetSchema())
+def update_target(pk: int, body: dict):
+    edit_target_by_id(pk, **body)
+    return '', 200
+
+
+@app.route('/api/targets/<int:pk>/', methods=['DELETE'])
+def delete_target(pk: int):
+    delete_target_by_id(pk)
+    return '', 200
+
+
+@app.route('/api/targets/<int:pk>/wake/', methods=['POST'])
+def wakeup_target(pk: int):
+    wakeup_target_by_id(pk)
+    return '', 200
+
+
+@app.route('/api/targets/<int:pk>/check/', methods=['POST'])
+def check_target(pk: int):
+    reached = check_target_by_id(pk)
+    return {'reached': reached}

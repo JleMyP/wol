@@ -10,6 +10,8 @@ from typing import (
     Optional,
 )
 
+from playhouse.flask_utils import get_object_or_404
+from marshmallow import Schema, fields
 from wakeonlan import send_magic_packet
 
 try:
@@ -36,8 +38,15 @@ except ImportError:
 else:
     from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
+from .models import (
+    Target,
+)
+from .fields import HostField, MacField
+
 __all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
-           'scan_local_net']
+           'scan_local_net', 'create_target', 'get_target_by_id', 'get_all_targets',
+           'delete_target_by_id', 'edit_target_by_id', 'wakeup_target_by_id', 'check_target_by_id',
+           'TargetSchema']
 
 
 ERROR_NOT_CONNECTED = 0
@@ -229,3 +238,52 @@ def get_net() -> str:
         net = scapy.utils.ltoa(network)
         mask = bin(netmask).count('1')
         return f'{net}/{mask}'
+
+
+class TargetSchema(Schema):
+    id = fields.Int(dump_only=True)
+    hostname = HostField()
+    mac = MacField()
+    # credentials = fields.Int()
+
+
+def create_target(hostname: Optional[str] = None, mac: Optional[str] = None,
+                  wol_port: Optional[int] = None, credentials: Optional[int] = None) -> int:
+    target = Target.create(hostname=hostname, mac=mac, wol_port=wol_port, credentials=credentials)
+    return target.id
+
+
+def get_target_by_id(id_: int) -> dict:
+    target = get_object_or_404(Target, Target.id == id_)
+    return TargetSchema().dump(target)
+
+
+def get_all_targets() -> List[dict]:
+    qs = Target.select()
+    result = list(qs.dicts())
+    return result
+
+
+def delete_target_by_id(id_: int):
+    target = get_object_or_404(Target, Target.id == id_)
+    target.delete_instance()
+
+
+def edit_target_by_id(id_: int, **kwargs):
+    target = get_object_or_404(Target, Target.id == id_)
+    edited_fields = []
+    for field_name, value in kwargs.items():
+        field = getattr(Target, field_name)
+        edited_fields.append(field)
+        setattr(target, field_name, value)
+    target.save(only=edited_fields)
+
+
+def wakeup_target_by_id(id_: int):
+    target = get_object_or_404(Target, Target.id == id_)
+    wakeup_host(target.mac, port=target.wol_port)
+
+
+def check_target_by_id(id_: int) -> bool:
+    target = get_object_or_404(Target, Target.id == id_)
+    return check_host(target.hostname)
