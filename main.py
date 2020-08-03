@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""
+входная точка для запуска dev сервера.
+"""
+
 
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
