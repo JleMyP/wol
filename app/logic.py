@@ -242,14 +242,14 @@ def get_net() -> str:
 
 class TargetSchema(Schema):
     id = fields.Int(dump_only=True)
-    hostname = HostField()
+    host = HostField()
     mac = MacField()
     # credentials = fields.Int()
 
 
-def create_target(hostname: Optional[str] = None, mac: Optional[str] = None,
+def create_target(host: Optional[str] = None, mac: Optional[str] = None,
                   wol_port: Optional[int] = None, credentials: Optional[int] = None) -> int:
-    target = Target.create(hostname=hostname, mac=mac, wol_port=wol_port, credentials=credentials)
+    target = Target.create(host=host, mac=mac, wol_port=wol_port, credentials=credentials)
     return target.id
 
 
@@ -286,4 +286,4 @@ def wakeup_target_by_id(id_: int):
 
 def check_target_by_id(id_: int) -> bool:
     target = get_object_or_404(Target, Target.id == id_)
-    return check_host(target.hostname)
+    return check_host(target.host)

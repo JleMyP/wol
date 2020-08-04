@@ -16,7 +16,7 @@ class Credentials(db.Model):
 
 
 class Target(db.Model):
-    hostname = CharField(null=True)
+    host = CharField(null=True)
     mac = CharField(null=True)
     wol_port = IntegerField(null=True)
     credentials = ForeignKeyField(Credentials, backref='targets', null=True)
