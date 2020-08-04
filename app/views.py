@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 from marshmallow import Schema, fields
 
 from .decorators import parse_body
@@ -44,6 +44,7 @@ class CheckHostSchema(Schema):
 
 
 api = Blueprint('api', __name__)
+web = Blueprint('web', __name__)
 
 
 @api.route('/check_host/', methods=['POST'])
@@ -130,3 +131,9 @@ def wakeup_target(pk: int):
 def check_target(pk: int):
     reached = check_target_by_id(pk)
     return {'reached': reached}
+
+
+@web.route('/targets/', methods=['GET'])
+def get_web_targets():
+    targets = get_all_targets()
+    return render_template('targets.html', targets=targets)

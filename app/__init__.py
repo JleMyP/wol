@@ -6,7 +6,7 @@ from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
 from .models import db
-from .views import api
+from .views import api, web
 
 
 def create_app():
@@ -18,6 +18,7 @@ def create_app():
 
     app = Flask(__name__)
     app.register_blueprint(api, url_prefix='/api')
+    app.register_blueprint(web)
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
