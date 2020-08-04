@@ -1,30 +1,41 @@
 import logging
 from sys import stdout
 
+from environs import Env
 from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
-log.addHandler(logging.StreamHandler(stdout))
-# TODO: шо это
-
-app = Flask(__name__)
-
-# TODO: env
-app.config['DATABASE'] = 'postgres://postgres@localhost:5432/wol'
+from .models import db
+from .views import api
 
 
-@app.errorhandler(ValidationError)
-def handle_validation(error: ValidationError):
-    response = jsonify(error.messages)
-    response.status_code = 400
-    return response
+def create_app():
+    env = Env()
+    env.read_env()
+
+    logger = logging.getLogger(__name__)
+    logger.addHandler(logging.StreamHandler(stdout))
+
+    app = Flask(__name__)
+    app.register_blueprint(api, )
+
+    with env.prefixed('WOL_'):
+        logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
+        app.config['DATABASE'] = env.str('DATABASE', 'postgres://postgres@localhost:5432/wol')
+        db.init_app(app)
 
 
-@app.errorhandler(NotImplementedError)
-def handle_not_implemented(error: NotImplementedError):
-    return Response(status=501)
+    @app.errorhandler(ValidationError)
+    def handle_validation(error: ValidationError):
+        response = jsonify(error.messages)
+        response.status_code = 400
+        return response
+
+    @app.errorhandler(NotImplementedError)
+    def handle_not_implemented(error: NotImplementedError):
+        return Response(status=501)
+
+    return app
 
 
 # TODO: ловить 404?

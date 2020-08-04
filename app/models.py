@@ -1,12 +1,10 @@
 from peewee import *
 from playhouse.flask_utils import FlaskDB 
 
-from app import app
-
 __all__ = ['db', 'Credentials', 'Target', 'WakeUpSchedule']
 
 
-db = FlaskDB(app)
+db = FlaskDB()
 
 
 class Credentials(db.Model):

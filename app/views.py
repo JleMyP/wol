@@ -1,7 +1,6 @@
-from flask import jsonify
+from flask import Blueprint, jsonify
 from marshmallow import Schema, fields
 
-from . import app
 from .decorators import parse_body
 from .fields import (
     HostField,
@@ -44,7 +43,10 @@ class CheckHostSchema(Schema):
     host = HostField(required=True)
 
 
-@app.route('/api/check_host/', methods=['POST'])
+api = Blueprint('api', __name__, url_prefix="/api")
+
+
+@api.route('/check_host/', methods=['POST'])
 @parse_body(CheckHostSchema())
 def ping(body: dict):
     """check, if host online."""
@@ -52,7 +54,7 @@ def ping(body: dict):
     return {'reached': reached}
 
 
-@app.route('/api/wake/', methods=['POST'])
+@api.route('/wake/', methods=['POST'])
 @parse_body(WakeupSchema())
 def wake(body: dict):
     """wakeup host by Wale on lan."""
@@ -60,7 +62,7 @@ def wake(body: dict):
     return '', 204
 
 
-@app.route('/api/cpu_stat/', methods=['POST'])
+@api.route('/cpu_stat/', methods=['POST'])
 @parse_body(SshActionSchema())
 def cpu_stat(body: dict):
     """cpu load of remote host (ssh)."""
@@ -71,13 +73,13 @@ def cpu_stat(body: dict):
     return stat._asdict()
 
 
-@app.route('/api/scan_net/', methods=['POST'])
+@api.route('/scan_net/', methods=['POST'])
 def scan_net():
     """search all hosts in local net."""
     return {'hosts': scan_local_net()}
 
 
-@app.route('/api/reboot/', methods=['POST'])
+@api.route('/reboot/', methods=['POST'])
 @parse_body(SshActionSchema())
 def reboot(body: dict):
     """reboot the remote host (ssh)."""
@@ -88,43 +90,43 @@ def reboot(body: dict):
     return '', 204
 
 
-@app.route('/api/targets/', methods=['GET'])
+@api.route('/targets/', methods=['GET'])
 def get_targets():
     return jsonify(get_all_targets())
 
 
-@app.route('/api/targets/', methods=['POST'])
+@api.route('/targets/', methods=['POST'])
 @parse_body(TargetSchema())
 def create_target_(body: dict):
     created = create_target(**body)
     return {'id': created}, 201
 
 
-@app.route('/api/targets/<int:pk>/', methods=['GET'])
+@api.route('/targets/<int:pk>/', methods=['GET'])
 def get_target(pk: int):
     return get_target_by_id(pk)
 
 
-@app.route('/api/targets/<int:pk>/', methods=['PUT', 'PATCH'])
+@api.route('/targets/<int:pk>/', methods=['PUT', 'PATCH'])
 @parse_body(TargetSchema())
 def update_target(pk: int, body: dict):
     edit_target_by_id(pk, **body)
     return '', 200
 
 
-@app.route('/api/targets/<int:pk>/', methods=['DELETE'])
+@api.route('/targets/<int:pk>/', methods=['DELETE'])
 def delete_target(pk: int):
     delete_target_by_id(pk)
     return '', 200
 
 
-@app.route('/api/targets/<int:pk>/wake/', methods=['POST'])
+@api.route('/targets/<int:pk>/wake/', methods=['POST'])
 def wakeup_target(pk: int):
     wakeup_target_by_id(pk)
     return '', 200
 
 
-@app.route('/api/targets/<int:pk>/check/', methods=['POST'])
+@api.route('/targets/<int:pk>/check/', methods=['POST'])
 def check_target(pk: int):
     reached = check_target_by_id(pk)
     return {'reached': reached}
