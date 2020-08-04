@@ -43,7 +43,7 @@ class CheckHostSchema(Schema):
     host = HostField(required=True)
 
 
-api = Blueprint('api', __name__, url_prefix="/api")
+api = Blueprint('api', __name__)
 
 
 @api.route('/check_host/', methods=['POST'])

@@ -17,7 +17,7 @@ def create_app():
     logger.addHandler(logging.StreamHandler(stdout))
 
     app = Flask(__name__)
-    app.register_blueprint(api, )
+    app.register_blueprint(api, url_prefix='/api')
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
