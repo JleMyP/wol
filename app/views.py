@@ -9,15 +9,21 @@ from .fields import (
     PortField,
 )
 from .logic import (
+    CredentialsSchema,
     RemoteExecError,
     TargetSchema,
     check_host,
     check_target_by_id,
+    create_credentials,
     create_target,
+    delete_credentials_by_id,
     delete_target_by_id,
+    edit_credentials_by_id,
     edit_target_by_id,
+    get_all_credentials,
     get_all_targets,
     get_cpu_stat,
+    get_credentials_by_id,
     get_target_by_id,
     reboot_host,
     scan_local_net,
@@ -137,3 +143,33 @@ def check_target(pk: int):
 def get_web_targets():
     targets = get_all_targets()
     return render_template('targets.html', targets=targets)
+
+
+@api.route('/credentials/', methods=['GET'])
+def get_credentials_list():
+    return jsonify(get_all_credentials())
+
+
+@api.route('/credentials/', methods=['POST'])
+@parse_body(CredentialsSchema())
+def create_credentials_(body: dict):
+    created = create_credentials(**body)
+    return {'id': created}, 201
+
+
+@api.route('/credentials/<int:pk>/', methods=['GET'])
+def get_credentials(pk: int):
+    return get_credentials_by_id(pk)
+
+
+@api.route('/credentials/<int:pk>/', methods=['PUT', 'PATCH'])
+@parse_body(CredentialsSchema())
+def update_credentials(pk: int, body: dict):
+    edit_credentials_by_id(pk, **body)
+    return '', 200
+
+
+@api.route('/credentials/<int:pk>/', methods=['DELETE'])
+def delete_credentials(pk: int):
+    delete_credentials_by_id(pk)
+    return '', 200

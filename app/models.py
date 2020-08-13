@@ -1,5 +1,5 @@
 from peewee import *
-from playhouse.flask_utils import FlaskDB 
+from playhouse.flask_utils import FlaskDB
 
 __all__ = ['db', 'Credentials', 'Target', 'WakeUpSchedule']
 
