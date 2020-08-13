@@ -10,9 +10,6 @@ from typing import (
     Optional,
 )
 
-from peewee import JOIN
-from playhouse.flask_utils import get_object_or_404
-from marshmallow import Schema, fields
 from wakeonlan import send_magic_packet
 
 try:
@@ -39,17 +36,8 @@ except ImportError:
 else:
     from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
-from .models import (
-    Credentials,
-    Target,
-)
-from .fields import HostField, MacField
-
 __all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
-           'scan_local_net', 'create_target', 'get_target_by_id', 'get_all_targets',
-           'delete_target_by_id', 'edit_target_by_id', 'wakeup_target_by_id', 'check_target_by_id',
-           'TargetSchema', 'CredentialsSchema']
-
+           'scan_local_net']
 
 ERROR_NOT_CONNECTED = 0
 ERROR_SSH = 1
@@ -185,8 +173,9 @@ def check_host(host: str) -> bool:
 
 def check_host_scapy(host: str) -> bool:
     """check by SYN/ACK to 80 port."""
-    packet = IP(host) / TCP()
-    response = sr1(packet)
+    packet = IP(dst=host) / TCP()
+    print(packet)
+    response = sr1(packet, timeout=15)
     return response is not None
 
 
@@ -240,89 +229,3 @@ def get_net() -> str:
         net = scapy.utils.ltoa(network)
         mask = bin(netmask).count('1')
         return f'{net}/{mask}'
-
-
-class CredentialsSchema(Schema):
-    id = fields.Int(dump_only=True)  # noqa: A003, VNE003
-    username = fields.Str()
-    password = fields.Str()
-    pkey = fields.Str()
-
-
-class TargetSchema(Schema):
-    id = fields.Int(dump_only=True)  # noqa: A003, VNE003
-    host = HostField()
-    mac = MacField()
-    credentials = fields.Nested(CredentialsSchema())
-
-
-def create_target(host: Optional[str] = None, mac: Optional[str] = None,
-                  wol_port: Optional[int] = None, credentials: Optional[int] = None) -> int:
-    target = Target.create(host=host, mac=mac, wol_port=wol_port, credentials=credentials)
-    return target.id
-
-
-def get_target_by_id(id_: int) -> dict:
-    target = get_object_or_404(Target, Target.id == id_)
-    return TargetSchema().dump(target)
-
-
-def get_all_targets() -> List[dict]:
-    qs = Target.select(Target, Credentials).join(Credentials, JOIN.LEFT_OUTER)
-    return TargetSchema(many=True).dump(qs)
-
-
-def delete_target_by_id(id_: int):
-    target = get_object_or_404(Target, Target.id == id_)
-    target.delete_instance()
-
-
-def edit_target_by_id(id_: int, **kwargs):
-    target = get_object_or_404(Target, Target.id == id_)
-    edited_fields = []
-    for field_name, value in kwargs.items():
-        field = getattr(Target, field_name)
-        edited_fields.append(field)
-        setattr(target, field_name, value)
-    target.save(only=edited_fields)
-
-
-def wakeup_target_by_id(id_: int):
-    target = get_object_or_404(Target, Target.id == id_)
-    wakeup_host(target.mac, port=target.wol_port)
-
-
-def check_target_by_id(id_: int) -> bool:
-    target = get_object_or_404(Target, Target.id == id_)
-    return check_host(target.host)
-
-
-def create_credentials(username: str, password: Optional[str] = None,
-                       pkey: Optional[str] = None) -> int:
-    credentials = Credentials.create(username=username, password=password, pkey=pkey)
-    return credentials.id
-
-
-def get_credentials_by_id(id_: int) -> dict:
-    credentials = get_object_or_404(Credentials, Credentials.id == id_)
-    return CredentialsSchema().dump(credentials)
-
-
-def get_all_credentials() -> List[dict]:
-    qs = Credentials.select()
-    return list(qs.dicts())
-
-
-def delete_credentials_by_id(id_: int):
-    credentials = get_object_or_404(Credentials, Credentials.id == id_)
-    credentials.delete_instance()
-
-
-def edit_credentials_by_id(id_: int, **kwargs):
-    credentials = get_object_or_404(Credentials, Credentials.id == id_)
-    edited_fields = []
-    for field_name, value in kwargs.items():
-        field = getattr(Credentials, field_name)
-        edited_fields.append(field)
-        setattr(credentials, field_name, value)
-    credentials.save(only=edited_fields)

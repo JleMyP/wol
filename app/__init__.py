@@ -6,7 +6,7 @@ from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
 from .models import db
-from .views import api, web
+from .views import core, crud, pages
 
 
 def create_app():
@@ -17,12 +17,13 @@ def create_app():
     logger.addHandler(logging.StreamHandler(stdout))
 
     app = Flask(__name__)
-    app.register_blueprint(api, url_prefix='/api')
-    app.register_blueprint(web)
+    app.register_blueprint(core, url_prefix='/api')
+    app.register_blueprint(crud, url_prefix='/api')
+    app.register_blueprint(pages)
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
-        app.config['DATABASE'] = env.str('DATABASE', 'postgres://postgres@localhost:5432/wol')
+        app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
         db.init_app(app)
 
 
@@ -38,5 +39,4 @@ def create_app():
 
     return app
 
-
-# TODO: ловить 404?
+    # TODO: ловить 404?
