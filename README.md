@@ -50,7 +50,7 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 ## usage
 
 **api**  
-[api](docs/api.html)  
+[api](/docs/api.html)  
 
 
 ## todo
@@ -59,11 +59,19 @@ functionality:
 * ssh pkey
 * access control
   * jwt
-* mass operations: check host, wakeup
 * browsable interface
 * configuration
   * sentry dsn
   * userless mode
+  * dbless mode, only core functionality
+* wake: ip_address -> hostname, response code 204
+* reboot: response code 204
+* sync host, hostname, address, login, username, etc
+* all delete responses -> 204
+* validate model filling in per model actions
+* extend per model actions
+* mass core operations
+* mass per model operations
 
 operability:
 * in-app openapi doc
