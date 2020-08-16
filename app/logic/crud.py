@@ -11,7 +11,7 @@ from ..models import (
     Credentials,
     Target,
 )
-from ..fields import HostField, MacField
+from ..fields import HostField, MacField, PortField
 from .core import check_host, wakeup_host
 
 __all__ = ['create_target', 'get_target_by_id', 'get_all_targets', 'delete_target_by_id',
@@ -32,6 +32,7 @@ class TargetSchema(Schema):
     id = fields.Int(dump_only=True)  # noqa: A003, VNE003
     host = HostField()
     mac = MacField()
+    wol_port = PortField()
     credentials = fields.Nested(CredentialsSchema())
 
 
