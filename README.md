@@ -48,6 +48,8 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 ## usage
 
 **api**  
+[api](/docs/api.html)  
+
 `*` - required parameter,  
 body and response format - json.
 

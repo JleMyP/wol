@@ -19,15 +19,14 @@ except ImportError:
 
 try:
     import scapy
-except ImportError:
-    scapy = None
-else:
     import scapy.config
     import scapy.route
     import scapy.utils
     from scapy.layers.l2 import arping
     from scapy.layers.inet import IP, TCP
     from scapy.sendrecv import sr1
+except Exception:
+    scapy = None
 
 try:
     import fabric
