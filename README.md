@@ -51,3 +51,25 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 
 **api**  
 [api](docs/api.html)  
+
+
+## todo
+
+functionality:
+* ssh pkey
+* access control
+  * jwt
+* mass operations: check host, wakeup
+* browsable interface
+* configuration
+  * sentry dsn
+  * userless mode
+
+operability:
+* in-app openapi doc
+* healthcheck
+  * disable ht logs
+* sentry
+* tests
+  * ci
+* github actions - build image

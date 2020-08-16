@@ -43,3 +43,5 @@ modules = ["app"]
 requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
+[tool.portray]
+modules = ["app"]
