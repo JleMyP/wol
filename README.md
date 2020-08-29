@@ -48,7 +48,7 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 ## usage
 
 **api**  
-[api](/docs/api.html)  
+[api](docs/api.html)  
 
 ---
 
