@@ -26,7 +26,6 @@ def create_app():
         app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
         db.init_app(app)
 
-
     @app.errorhandler(ValidationError)
     def handle_validation(error: ValidationError):
         response = jsonify(error.messages)

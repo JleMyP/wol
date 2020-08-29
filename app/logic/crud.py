@@ -1,17 +1,12 @@
-from typing import (
-    List,
-    Optional,
-)
+from typing import List, Optional
 
 from marshmallow import Schema, fields
 from peewee import JOIN
 from playhouse.flask_utils import get_object_or_404
 
-from ..models import (
-    Credentials,
-    Target,
-)
-from ..fields import HostField, MacField
+from ..doc_utils import exclude_parent_attrs
+from ..fields import HostField, MacField, PortField
+from ..models import Credentials, Target
 from .core import check_host, wakeup_host
 
 __all__ = ['create_target', 'get_target_by_id', 'get_all_targets', 'delete_target_by_id',
@@ -22,6 +17,7 @@ __all__ = ['create_target', 'get_target_by_id', 'get_all_targets', 'delete_targe
 
 
 class CredentialsSchema(Schema):
+    """credentials (de)serialization"""
     id = fields.Int(dump_only=True)  # noqa: A003, VNE003
     username = fields.Str()
     password = fields.Str()
@@ -29,9 +25,11 @@ class CredentialsSchema(Schema):
 
 
 class TargetSchema(Schema):
+    """target (de)serialization"""
     id = fields.Int(dump_only=True)  # noqa: A003, VNE003
     host = HostField()
     mac = MacField()
+    wol_port = PortField()
     credentials = fields.Nested(CredentialsSchema())
 
 
@@ -107,3 +105,7 @@ def delete_credentials_by_id(id_: int):
 
 def edit_credentials_by_id(id_: int, **kwargs):
     _edit_object_by_id(Credentials, id_, **kwargs)
+
+
+for schema in (CredentialsSchema, TargetSchema):
+    exclude_parent_attrs(schema)

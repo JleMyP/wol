@@ -1,8 +1,9 @@
 from peewee import *
 from playhouse.flask_utils import FlaskDB
 
-__all__ = ['db', 'Credentials', 'Target', 'WakeUpSchedule']
+from .doc_utils import exclude_parent_attrs
 
+__all__ = ['db', 'Credentials', 'Target', 'WakeUpSchedule']
 
 db = FlaskDB()
 
@@ -24,3 +25,7 @@ class WakeUpSchedule(db.Model):
     enabled = BooleanField(default=True)
     target = ForeignKeyField(Target, backref='wakeup_schedules')
     # TODO: расписание
+
+
+for model in (Credentials, Target, WakeUpSchedule):
+    exclude_parent_attrs(model, ('id',))
