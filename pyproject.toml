@@ -29,6 +29,7 @@ flake8-bugbear = "^20.1.4"
 flake8-builtins = "^1.5.3"
 flake8-variables-names = "^0.0.3"
 flask-shell-ipython = "^0.4.1"
+portray = "^1.4.0"
 
 [tool.isort]
 line_length = 100
@@ -36,9 +37,9 @@ multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 4
 
+[tool.portray]
+modules = ["app"]
 [build-system]
 requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
-[tool.portray]
-modules = ["app"]
