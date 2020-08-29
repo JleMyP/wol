@@ -55,6 +55,7 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 ## todo
 
 functionality:
+
 * ssh pkey
 * access control
   * jwt
@@ -73,6 +74,7 @@ functionality:
 * mass per model operations
 
 operability:
+
 * in-app openapi doc
 * healthcheck
   * disable ht logs

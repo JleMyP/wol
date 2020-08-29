@@ -35,6 +35,8 @@ except ImportError:
 else:
     from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
+from ..doc_utils import exclude_parent_attrs
+
 __all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
            'scan_local_net']
 
@@ -96,6 +98,7 @@ class BaseOps(NamedTuple):
 
 
 class CpuStat(CpuStatBase, BaseOps):
+    """CPU load representation"""
     def short(self):
         return CpuStatShort(user=self.user + self.nice, system=self.system,
                             idle=self.idle, iowait=self.iowait)  # noqa  # TODO: charm, wtf?
@@ -106,6 +109,7 @@ class CpuStatShort(CpuStatShortBase, BaseOps):
 
 
 class RemoteExecError(Exception):
+    """exception while performing remote operation, e.g. reboot"""
     def __init__(self, code: int, reason: str, details: Optional[any] = None):
         self.code = code
         self.reason = reason
@@ -186,15 +190,13 @@ def check_host_ping(host: str) -> bool:
 
 
 def wakeup_host(mac: str, ip_address: str = '255.255.255.255', port: int = 9):
-    """
-    scapy:
-        from scapy.sendrecv import send
-        from scapy.layers.inet import IP, UDP
-        magic = bytes.fromhex(mac.replace(':', '')
-        start = bytes.fromhex('FF')*6
-        packet = IP(dst=ip_address) / UDP(dport=port) / (start + magic*16)
-        send(packet)
-    """
+    # scapy:
+    #     from scapy.sendrecv import send
+    #     from scapy.layers.inet import IP, UDP
+    #     magic = bytes.fromhex(mac.replace(':', '')
+    #     start = bytes.fromhex('FF')*6
+    #     packet = IP(dst=ip_address) / UDP(dport=port) / (start + magic*16)
+    #     send(packet)
     send_magic_packet(mac, ip_address=ip_address, port=port)
 
 
@@ -228,3 +230,7 @@ def get_net() -> str:
         net = scapy.utils.ltoa(network)
         mask = bin(netmask).count('1')
         return f'{net}/{mask}'
+
+
+exclude_parent_attrs(CpuStat)
+exclude_parent_attrs(RemoteExecError)
