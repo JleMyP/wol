@@ -9,7 +9,7 @@ from .models import db
 from .views import core, crud, pages
 
 
-def create_app():
+def create_app(no_db: bool = False):
     env = Env()
     env.read_env()
 
@@ -18,13 +18,14 @@ def create_app():
 
     app = Flask(__name__)
     app.register_blueprint(core, url_prefix='/api')
-    app.register_blueprint(crud, url_prefix='/api')
-    app.register_blueprint(pages)
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
         app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
-        db.init_app(app)
+        if not env.bool('NO_DB', False) and not no_db:
+            db.init_app(app)
+            app.register_blueprint(crud, url_prefix='/api')
+            app.register_blueprint(pages)
 
     @app.errorhandler(ValidationError)
     def handle_validation(error: ValidationError):

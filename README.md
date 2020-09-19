@@ -19,7 +19,9 @@ to get command-line arguments type `python main.py -h`.
 **arguments**  
 * `--bind`, `-b` - listen interface address. default - 127.0.0.1;  
 * `--port`, `-p` - listen port. default - 5000;  
-* `--debug`, `-d` - run in debug mode. default - false.  
+* `--debug`, `-d` - run in debug mode. default - false;  
+* `--no-db` - do not use database and disable CRUD api.  
+
 
 arguments also can be passed through env vars prefixed by `WOL_`,
 example - `WOL_PORT=3000 python main.py`.  

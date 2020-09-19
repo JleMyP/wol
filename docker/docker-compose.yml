@@ -1,0 +1,35 @@
+version: "3.7"
+
+x-defaults: &defaults
+   inage: wol
+   build:
+       context: ../
+       dockerfile: docker/Dockerfile-prod
+   environment:
+       REDIS_URL: redis://redis:6379/0
+       RQ_SCHEDULER_INTERVAL: 60
+   restart: on-failure
+
+services:
+    redis:
+        image: redis:alpine
+        restart: on-failure
+        command: redis-server --appendonly yes
+    dashboard:
+        image: eoranged/rq-dashboard
+        ports:
+          - 9181:9181
+        environment:
+            RQ_DASHBOARD_REDIS_URL: redis://redis:6379/0
+        restart: on-failure
+    scheduler:
+        <<: *defaults
+        command: ["scheduler"]
+    worker:
+        <<: *defaults
+        command: ["worker"]
+    backend:
+        <<: *defaults
+        command: ["server"]
+        ports:
+          - 8080:8080
