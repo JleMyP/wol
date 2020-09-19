@@ -189,15 +189,15 @@ def check_host_ping(host: str) -> bool:
     return proc.returncode == 0
 
 
-def wakeup_host(mac: str, ip_address: str = '255.255.255.255', port: int = 9):
+def wakeup_host(mac: str, host: str = '255.255.255.255', port: int = 9):
     # scapy:
     #     from scapy.sendrecv import send
     #     from scapy.layers.inet import IP, UDP
     #     magic = bytes.fromhex(mac.replace(':', '')
     #     start = bytes.fromhex('FF')*6
-    #     packet = IP(dst=ip_address) / UDP(dport=port) / (start + magic*16)
+    #     packet = IP(dst=host) / UDP(dport=port) / (start + magic*16)
     #     send(packet)
-    send_magic_packet(mac, ip_address=ip_address, port=port)
+    send_magic_packet(mac, ip_address=host, port=port)
 
 
 def reboot_host(host: str, login: str, password: str, port: int = 22):

@@ -29,7 +29,7 @@ class SshActionSchema(Schema):
 
 class WakeupSchema(Schema):
     mac = MacField(required=True)
-    ip_address = IpAddressField(missing='255.255.255.255')
+    host = IpAddressField(missing='255.255.255.255')
     port = PortField(missing=9)
 
 

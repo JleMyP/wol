@@ -42,19 +42,19 @@ def get_target(pk: int):
 @parse_body(TargetSchema())
 def update_target(pk: int, body: dict):
     edit_target_by_id(pk, **body)
-    return '', 200
+    return '', 204
 
 
 @crud.route('/targets/<int:pk>/', methods=['DELETE'])
 def delete_target(pk: int):
     delete_target_by_id(pk)
-    return '', 200
+    return '', 204
 
 
 @crud.route('/targets/<int:pk>/wake/', methods=['POST'])
 def wakeup_target(pk: int):
     wakeup_target_by_id(pk)
-    return '', 200
+    return '', 204
 
 
 @crud.route('/targets/<int:pk>/check/', methods=['POST'])
@@ -84,10 +84,10 @@ def get_credentials(pk: int):
 @parse_body(CredentialsSchema())
 def update_credentials(pk: int, body: dict):
     edit_credentials_by_id(pk, **body)
-    return '', 200
+    return '', 204
 
 
 @crud.route('/credentials/<int:pk>/', methods=['DELETE'])
 def delete_credentials(pk: int):
     delete_credentials_by_id(pk)
-    return '', 200
+    return '', 204
