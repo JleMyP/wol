@@ -64,7 +64,6 @@ functionality:
 * configuration
   * sentry dsn
   * userless mode
-  * dbless mode, only core functionality
 * wake: ip_address -> hostname, response code 204
 * reboot: response code 204
 * sync host, hostname, address, login, username, etc
