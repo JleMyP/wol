@@ -20,7 +20,7 @@ to get command-line arguments type `python main.py -h`.
 * `--bind`, `-b` - listen interface address. default - 127.0.0.1;  
 * `--port`, `-p` - listen port. default - 5000;  
 * `--debug`, `-d` - run in debug mode. default - false;  
-* `--no-db` - do not use database and disable CRUD api.  
+* `--no-db` - do not use database and disable CRUD api.
 
 
 arguments also can be passed through env vars prefixed by `WOL_`,
@@ -50,4 +50,32 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 ## usage
 
 **api**  
-[api](docs/api.html)  
+[api](docs/api.html)
+
+
+## todo
+
+functionality:
+
+* ssh pkey
+* access control
+  * jwt
+* browsable interface
+* configuration
+  * sentry dsn
+  * userless mode
+* sync host, hostname, address, login, username, etc
+* validate model filling in per model actions
+* extend per model actions
+* mass core operations
+* mass per model operations
+
+operability:
+
+* in-app openapi doc
+* healthcheck
+  * disable ht logs
+* sentry
+* tests
+  * ci
+* github actions - build image
