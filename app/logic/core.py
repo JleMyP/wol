@@ -30,10 +30,9 @@ except Exception:
 
 try:
     import fabric
+    from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 except ImportError:
     fabric = None
-else:
-    from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
 from ..doc_utils import exclude_parent_attrs
 

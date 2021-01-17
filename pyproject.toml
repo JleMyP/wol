@@ -2,34 +2,39 @@
 name = "wol"
 version = "0.1.0"
 description = ""
-authors = ["Tim <jlemyp96@gmail.com>"]
+authors = []
 
 [tool.poetry.dependencies]
 python = "^3.7"
 wakeonlan = "^1.1"
-pyexpect = "^1.0"
 flask = "^1.1.2"
-fabric = { version = "^2.5", markers = "platform_machine != 'mips'" } # can't build pynacl on mips
+fabric = { version = "^2.5", markers = "platform_machine != 'mips'", optional = true } # can't build pynacli
 singledispatchmethod = { version = "^1.0", python = "~3.7.0" }
 marshmallow = "^3.5.2"
 validators = "^0.14.3"
-scapy = "^2.4.3"
+scapy = { version = "^2.4.3", optional = true }
 configargparse = "^1.2.3"
 gunicorn = "^20.0.4"
 environs = "^8.0.0"
-peewee = "^3.13.3"
-psycopg2-binary = "^2.8.5"
+peewee = { version = "^3.13.3", optional = true }
+psycopg2-binary = { version = "^2.8.5", optional = true }
+
+[tool.poetry.extras]
+ssh = ["fabric"]
+scapy = ["scapy"]
+db = ["psycopg2-binary", "peewee"]
+all = ["fabric", "scapy", "psycopg2-binary", "peewee"]
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.5"
+flask-shell-ipython = "^0.4.1"
+portray = "^1.4.0"
 pytest = "^3.0"
 flake8-isort = "^3.0.0"
 flake8-bandit = "^2.1.2"
 flake8-bugbear = "^20.1.4"
 flake8-builtins = "^1.5.3"
 flake8-variables-names = "^0.0.3"
-flask-shell-ipython = "^0.4.1"
-portray = "^1.4.0"
 
 [tool.isort]
 line_length = 100

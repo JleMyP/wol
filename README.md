@@ -5,7 +5,7 @@ wake on lan and some useful stuff as web service.
 
 ```bash
 pip install poetry
-poetry install
+poetry install --no-dev --extras all
 ```
 
 ## dev launch

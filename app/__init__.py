@@ -5,8 +5,15 @@ from environs import Env
 from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
 
-from .models import db
-from .views import core, crud, pages
+from .views import core
+
+try:
+    from .models import db
+except ImportError:
+    db = None
+
+if db:
+    from .views import crud, pages
 
 
 def create_app(no_db: bool = False):
@@ -21,8 +28,9 @@ def create_app(no_db: bool = False):
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
-        app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
-        if not env.bool('NO_DB', False) and not no_db:
+        # TODO: треш
+        if not env('NO_DB', False) and not no_db and db:
+            app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
             db.init_app(app)
             app.register_blueprint(crud, url_prefix='/api')
             app.register_blueprint(pages)
