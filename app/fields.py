@@ -9,6 +9,7 @@ from typing import (
     Type,
 )
 
+from fabric.config import Config
 from marshmallow import ValidationError, fields, validate
 from validators import (
     domain,
@@ -27,7 +28,7 @@ def validate_ip(ip: str) -> None:
         if validator(ip) is True:
             break
     else:
-        raise ValidationError('is not a valid ip address')
+        raise ValidationError(f'"{ip}" is not a valid ip address')
 
 
 def validate_host(host: str) -> None:
@@ -35,12 +36,17 @@ def validate_host(host: str) -> None:
         if validator(host) is True:
             break
     else:
-        raise ValidationError('is not a valid host')
+        patterns = Config().base_ssh_config.get_hostnames()
+        # TODO: more complex filter
+        known_hosts = [p for p in patterns if '*' not in p]
+        known_hosts += ['localhost']
+        if host not in known_hosts:
+            raise ValidationError(f'"{host}" is not a valid host')
 
 
 def validate_mac(mac: str) -> None:
     if mac_address(mac) is not True:
-        raise ValidationError('is not a valid mac')
+        raise ValidationError(f'"{mac}" is not a valid mac')
 
 
 def add_validators(name: str, base: Type[fields.Field],

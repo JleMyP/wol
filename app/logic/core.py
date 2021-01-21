@@ -37,7 +37,7 @@ except ImportError:
 from ..doc_utils import exclude_parent_attrs
 
 __all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
-           'scan_local_net']
+           'scan_local_net', 'shutdown_host']
 
 ERROR_NOT_CONNECTED = 0
 ERROR_SSH = 1
@@ -123,15 +123,20 @@ class RemoteExecError(Exception):
 
 
 if fabric:
-    def remote_exec_command(command: str, host: str, login: str, password: str,
-                            port: int = 22) -> dict:
+    # TODO: extract ssh credentials
+    def remote_exec_command(command: str, host: str, login: Optional[str] = None,
+                            password: Optional[str] = None, port: int = 22,
+                            sudo: bool = False) -> dict:
         try:
             with fabric.Connection(host, login, port, connect_kwargs={'password': password}) as c:
-                res = c.run(command, warn=True)
+                if sudo:
+                    res = c.sudo(command, warn=True, hide=True, password=password)
+                else:
+                    res = c.run(command, warn=True, hide=True)
         except NoValidConnectionsError:
             raise RemoteExecError(ERROR_NOT_CONNECTED, "can't connect to host")
-        except SSHException:
-            raise RemoteExecError(ERROR_SSH, 'ssh exception')
+        except SSHException as e:
+            raise RemoteExecError(ERROR_SSH, "ssh exception", vars(e))
         if res.exited:
             raise RemoteExecError(ERROR_EXEC, "can't exec command",
                                   {'out': res.stdout, 'err': res.stderr})
@@ -143,10 +148,10 @@ else:
         raise NotImplementedError
 
 
-def get_cpu_stat(host: str, login: str, password: str, port: int = 22,
-                 precision: Optional[int] = None) -> CpuStat:
-    # TODO: describe the algorithm
-    cmd = 'head -1 /proc/stat && sleep 1 1>/dev/null && head -1 /proc/stat'
+def get_cpu_stat(host: str, login: Optional[str] = None, password: Optional[str] = None,
+                 port: int = 22, precision: Optional[int] = None) -> CpuStat:
+    # TODO: add memory information
+    cmd = 'head -1 /proc/stat && sleep 1 > /dev/null && head -1 /proc/stat'
     res = remote_exec_command(cmd, host, login, password, port)
     l1, l2, *_ = res['stdout'].split('\n')
     stat = get_delta_from_str(l1, l2)
@@ -167,16 +172,15 @@ def can_use_scapy() -> bool:
     return os.geteuid() == 0 and scapy is not None
 
 
-def check_host(host: str) -> bool:
+def check_host(host: str, port: Optional[int] = 80) -> bool:
     if can_use_scapy():
-        return check_host_scapy(host)
+        return check_host_scapy(host, port=port)
     return check_host_ping(host)
 
 
-def check_host_scapy(host: str) -> bool:
-    """check by SYN/ACK to 80 port."""
-    packet = IP(dst=host) / TCP()
-    print(packet)
+def check_host_scapy(host: str, port: Optional[int] = 80) -> bool:
+    """check by SYN/ACK to specified port."""
+    packet = IP(dst=host) / TCP(dport=port or 80)
     response = sr1(packet, timeout=15)
     return response is not None
 
@@ -199,16 +203,24 @@ def wakeup_host(mac: str, host: str = '255.255.255.255', port: int = 9):
     send_magic_packet(mac, ip_address=host, port=port)
 
 
-def reboot_host(host: str, login: str, password: str, port: int = 22):
-    remote_exec_command('reboot', host, login, password, port)
+def reboot_host(host: str, login: Optional[str] = None, password: Optional[str] = None,
+                port: int = 22):
+    remote_exec_command('reboot', host, login, password, port, sudo=True)
 
 
-def scan_local_net() -> List[str]:
+def shutdown_host(host: str, login: Optional[str] = None, password: Optional[str] = None,
+                  port: int = 22):
+    remote_exec_command('shutdown now', host, login, password, sudo=True)
+
+
+def scan_local_net(net: Optional[str] = None) -> List[str]:
     """get hosts from local net by ARP protocol."""
+    # TODO: select network interface w/o mask
     if not can_use_scapy():
         raise NotImplementedError
 
-    net = get_net()
+    if not net:
+        net = get_net()
     ans, _ = arping(net)
     hosts = [r.psrc for _, r in ans.res]
     return hosts
@@ -216,6 +228,9 @@ def scan_local_net() -> List[str]:
 
 def get_net() -> str:
     """find network interface/mask, that has access to the Internet."""
+    # TODO: or find default gw
+    #  iface - route net = 0, mask = 0
+    #  net/mask - out = iface, mask != ffffffff
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
         if network == 0 or interface == 'lo' or address in ('127.0.0.1', '0.0.0.0'):  # noqa: S104
             continue
