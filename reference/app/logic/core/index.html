@@ -197,19 +197,31 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href="../../../../cli/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
-    <label class="md-nav__link" for="nav-2">
+    <label class="md-nav__link" for="nav-3">
       Reference
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Reference" data-md-level="1">
-      <label class="md-nav__title" for="nav-2">
+      <label class="md-nav__title" for="nav-3">
         <span class="md-nav__icon md-icon"></span>
         Reference
       </label>
@@ -225,14 +237,14 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
     
-    <label class="md-nav__link" for="nav-2-1">
+    <label class="md-nav__link" for="nav-3-1">
       App
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="App" data-md-level="2">
-      <label class="md-nav__title" for="nav-2-1">
+      <label class="md-nav__title" for="nav-3-1">
         <span class="md-nav__icon md-icon"></span>
         App
       </label>
@@ -308,14 +320,14 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-6" type="checkbox" id="nav-2-1-6" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-6" type="checkbox" id="nav-3-1-6" checked>
     
-    <label class="md-nav__link" for="nav-2-1-6">
+    <label class="md-nav__link" for="nav-3-1-6">
       Logic
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Logic" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-6">
+      <label class="md-nav__title" for="nav-3-1-6">
         <span class="md-nav__icon md-icon"></span>
         Logic
       </label>
@@ -390,6 +402,13 @@
           <li class="md-nav__item">
   <a href="#scan_local_net" class="md-nav__link">
     scan_local_net
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shutdown_host" class="md-nav__link">
+    shutdown_host
   </a>
   
 </li>
@@ -542,14 +561,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-7" type="checkbox" id="nav-2-1-7">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-7" type="checkbox" id="nav-3-1-7">
     
-    <label class="md-nav__link" for="nav-2-1-7">
+    <label class="md-nav__link" for="nav-3-1-7">
       Views
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Views" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-7">
+      <label class="md-nav__title" for="nav-3-1-7">
         <span class="md-nav__icon md-icon"></span>
         Views
       </label>
@@ -674,6 +693,13 @@
           <li class="md-nav__item">
   <a href="#scan_local_net" class="md-nav__link">
     scan_local_net
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shutdown_host" class="md-nav__link">
+    shutdown_host
   </a>
   
 </li>
@@ -860,19 +886,17 @@
 
     <span class="kn">import</span> <span class="nn">fabric</span>
 
+    <span class="kn">from</span> <span class="nn">paramiko.ssh_exception</span> <span class="kn">import</span> <span class="n">NoValidConnectionsError</span><span class="p">,</span> <span class="n">SSHException</span>
+
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 
     <span class="n">fabric</span> <span class="o">=</span> <span class="bp">None</span>
-
-<span class="k">else</span><span class="p">:</span>
-
-    <span class="kn">from</span> <span class="nn">paramiko.ssh_exception</span> <span class="kn">import</span> <span class="n">NoValidConnectionsError</span><span class="p">,</span> <span class="n">SSHException</span>
 
 <span class="kn">from</span> <span class="nn">..doc_utils</span> <span class="kn">import</span> <span class="n">exclude_parent_attrs</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CpuStat&#39;</span><span class="p">,</span> <span class="s1">&#39;check_host&#39;</span><span class="p">,</span> <span class="s1">&#39;reboot_host&#39;</span><span class="p">,</span> <span class="s1">&#39;get_cpu_stat&#39;</span><span class="p">,</span> <span class="s1">&#39;wakeup_host&#39;</span><span class="p">,</span> <span class="s1">&#39;RemoteExecError&#39;</span><span class="p">,</span>
 
-           <span class="s1">&#39;scan_local_net&#39;</span><span class="p">]</span>
+           <span class="s1">&#39;scan_local_net&#39;</span><span class="p">,</span> <span class="s1">&#39;shutdown_host&#39;</span><span class="p">]</span>
 
 <span class="n">ERROR_NOT_CONNECTED</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -998,23 +1022,33 @@
 
 <span class="k">if</span> <span class="n">fabric</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">remote_exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="c1"># TODO: extract ssh credentials</span>
 
-                            <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">remote_exec_command</span><span class="p">(</span><span class="n">command</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+
+                            <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span>
+
+                            <span class="n">sudo</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
 
         <span class="k">try</span><span class="p">:</span>
 
             <span class="k">with</span> <span class="n">fabric</span><span class="o">.</span><span class="n">Connection</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">connect_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">})</span> <span class="k">as</span> <span class="n">c</span><span class="p">:</span>
 
-                <span class="n">res</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sudo</span><span class="p">:</span>
+
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">sudo</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+
+                    <span class="n">res</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">hide</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="k">except</span> <span class="n">NoValidConnectionsError</span><span class="p">:</span>
 
             <span class="k">raise</span> <span class="n">RemoteExecError</span><span class="p">(</span><span class="n">ERROR_NOT_CONNECTED</span><span class="p">,</span> <span class="s2">&quot;can&#39;t connect to host&quot;</span><span class="p">)</span>
 
-        <span class="k">except</span> <span class="n">SSHException</span><span class="p">:</span>
+        <span class="k">except</span> <span class="n">SSHException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 
-            <span class="k">raise</span> <span class="n">RemoteExecError</span><span class="p">(</span><span class="n">ERROR_SSH</span><span class="p">,</span> <span class="s1">&#39;ssh exception&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">RemoteExecError</span><span class="p">(</span><span class="n">ERROR_SSH</span><span class="p">,</span> <span class="s2">&quot;ssh exception&quot;</span><span class="p">,</span> <span class="nb">vars</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">exited</span><span class="p">:</span>
 
@@ -1034,13 +1068,13 @@
 
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<span class="k">def</span> <span class="nf">get_cpu_stat</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span>
+<span class="k">def</span> <span class="nf">get_cpu_stat</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 
-                 <span class="n">precision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CpuStat</span><span class="p">:</span>
+                 <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span> <span class="n">precision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CpuStat</span><span class="p">:</span>
 
-    <span class="c1"># TODO: describe the algorithm</span>
+    <span class="c1"># TODO: add memory information</span>
 
-    <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;head -1 /proc/stat &amp;&amp; sleep 1 1&gt;/dev/null &amp;&amp; head -1 /proc/stat&#39;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s1">&#39;head -1 /proc/stat &amp;&amp; sleep 1 &gt; /dev/null &amp;&amp; head -1 /proc/stat&#39;</span>
 
     <span class="n">res</span> <span class="o">=</span> <span class="n">remote_exec_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
 
@@ -1070,21 +1104,19 @@
 
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">geteuid</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">scapy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
 
-<span class="k">def</span> <span class="nf">check_host</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">check_host</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 
     <span class="k">if</span> <span class="n">can_use_scapy</span><span class="p">():</span>
 
-        <span class="k">return</span> <span class="n">check_host_scapy</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">check_host_scapy</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">check_host_ping</span><span class="p">(</span><span class="n">host</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">check_host_scapy</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">check_host_scapy</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 
-    <span class="sd">&quot;&quot;&quot;check by SYN/ACK to 80 port.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;check by SYN/ACK to specified port.&quot;&quot;&quot;</span>
 
-    <span class="n">packet</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">host</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">()</span>
-
-    <span class="k">print</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>
+    <span class="n">packet</span> <span class="o">=</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">host</span><span class="p">)</span> <span class="o">/</span> <span class="n">TCP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="n">port</span> <span class="ow">or</span> <span class="mi">80</span><span class="p">)</span>
 
     <span class="n">response</span> <span class="o">=</span> <span class="n">sr1</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
@@ -1118,19 +1150,31 @@
 
     <span class="n">send_magic_packet</span><span class="p">(</span><span class="n">mac</span><span class="p">,</span> <span class="n">ip_address</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">reboot_host</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">reboot_host</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
 
-    <span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;reboot&#39;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+                <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">):</span>
 
-<span class="k">def</span> <span class="nf">scan_local_net</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;reboot&#39;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">shutdown_host</span><span class="p">(</span><span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+
+                  <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">):</span>
+
+    <span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;shutdown now&#39;</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">sudo</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">scan_local_net</span><span class="p">(</span><span class="n">net</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 
     <span class="sd">&quot;&quot;&quot;get hosts from local net by ARP protocol.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: select network interface w/o mask</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">can_use_scapy</span><span class="p">():</span>
 
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-    <span class="n">net</span> <span class="o">=</span> <span class="n">get_net</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">net</span><span class="p">:</span>
+
+        <span class="n">net</span> <span class="o">=</span> <span class="n">get_net</span><span class="p">()</span>
 
     <span class="n">ans</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">arping</span><span class="p">(</span><span class="n">net</span><span class="p">)</span>
 
@@ -1141,6 +1185,12 @@
 <span class="k">def</span> <span class="nf">get_net</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 
     <span class="sd">&quot;&quot;&quot;find network interface/mask, that has access to the Internet.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: or find default gw</span>
+
+    <span class="c1">#  iface - route net = 0, mask = 0</span>
+
+    <span class="c1">#  net/mask - out = iface, mask != ffffffff</span>
 
     <span class="k">for</span> <span class="n">network</span><span class="p">,</span> <span class="n">netmask</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">interface</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">scapy</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">route</span><span class="o">.</span><span class="n">routes</span><span class="p">:</span>
 
@@ -1178,18 +1228,19 @@
 <h2 id="functions">Functions</h2>
 <h3 id="check_host">check_host</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">check_host</span><span class="p">(</span>
-    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">port</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="mi">80</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
 </code></pre></div>
 
 
-<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">check_host</span><span class="p">(</span><span class="k">host</span><span class="p">:</span> <span class="n">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bool</span><span class="p">:</span>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">check_host</span><span class="p">(</span><span class="k">host</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">port</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">80</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nl">bool</span><span class="p">:</span><span class="w"></span>
 
-    <span class="k">if</span> <span class="n">can_use_scapy</span><span class="p">():</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">can_use_scapy</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
 
-        <span class="k">return</span> <span class="n">check_host_scapy</span><span class="p">(</span><span class="k">host</span><span class="p">)</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">check_host_scapy</span><span class="p">(</span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span><span class="w"></span>
 
-    <span class="k">return</span> <span class="n">check_host_ping</span><span class="p">(</span><span class="k">host</span><span class="p">)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">check_host_ping</span><span class="p">(</span><span class="k">host</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 
 
@@ -1197,21 +1248,21 @@
 <h3 id="get_cpu_stat">get_cpu_stat</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">get_cpu_stat</span><span class="p">(</span>
     <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">,</span>
-    <span class="n">precision</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">app</span><span class="o">.</span><span class="n">logic</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">CpuStat</span>
 </code></pre></div>
 
 
-<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">get_cpu_stat</span><span class="p">(</span><span class="k">host</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">login</span><span class="p">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">port</span><span class="p">:</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"></span>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">get_cpu_stat</span><span class="p">(</span><span class="k">host</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">login</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"></span>
 
-<span class="w">                 </span><span class="k">precision</span><span class="err">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nl">CpuStat</span><span class="p">:</span><span class="w"></span>
+<span class="w">                 </span><span class="nl">port</span><span class="p">:</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">,</span><span class="w"> </span><span class="k">precision</span><span class="err">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">int</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nl">CpuStat</span><span class="p">:</span><span class="w"></span>
 
-<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nl">TODO</span><span class="p">:</span><span class="w"> </span><span class="k">describe</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">algorithm</span><span class="w"></span>
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nl">TODO</span><span class="p">:</span><span class="w"> </span><span class="k">add</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="n">information</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;head -1 /proc/stat &amp;&amp; sleep 1 1&gt;/dev/null &amp;&amp; head -1 /proc/stat&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;head -1 /proc/stat &amp;&amp; sleep 1 &gt; /dev/null &amp;&amp; head -1 /proc/stat&#39;</span><span class="w"></span>
 
 <span class="w">    </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">remote_exec_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">login</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">port</span><span class="p">)</span><span class="w"></span>
 
@@ -1231,43 +1282,68 @@
 <h3 id="reboot_host">reboot_host</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">reboot_host</span><span class="p">(</span>
     <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">login</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span>
 <span class="p">)</span>
 </code></pre></div>
 
 
-<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span> <span class="n">reboot_host</span><span class="p">(</span><span class="k">host</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span> <span class="n">login</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="n">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span><span class="p">):</span>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">reboot_host</span><span class="p">(</span><span class="k">host</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">login</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"></span>
 
-    <span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;reboot&#39;</span><span class="p">,</span> <span class="k">host</span><span class="p">,</span> <span class="n">login</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="w">                </span><span class="nl">port</span><span class="p">:</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;reboot&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">login</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">port</span><span class="p">,</span><span class="w"> </span><span class="n">sudo</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 
 
 </details>
 <h3 id="scan_local_net">scan_local_net</h3>
 <div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">scan_local_net</span><span class="p">(</span>
-
+    <span class="n">net</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
 </code></pre></div>
 
 
 <p>get hosts from local net by ARP protocol.</p>
-<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">scan_local_net</span><span class="p">()</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="err">:</span><span class="w"></span>
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">scan_local_net</span><span class="p">(</span><span class="nl">net</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">List</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="err">:</span><span class="w"></span>
 
 <span class="w">    </span><span class="ss">&quot;&quot;&quot;get hosts from local net by ARP protocol.&quot;&quot;&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nl">TODO</span><span class="p">:</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="n">network</span><span class="w"> </span><span class="n">interface</span><span class="w"> </span><span class="n">w</span><span class="o">/</span><span class="n">o</span><span class="w"> </span><span class="n">mask</span><span class="w"></span>
 
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">can_use_scapy</span><span class="p">()</span><span class="err">:</span><span class="w"></span>
 
 <span class="w">        </span><span class="n">raise</span><span class="w"> </span><span class="n">NotImplementedError</span><span class="w"></span>
 
-<span class="w">    </span><span class="n">net</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_net</span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nl">net</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">net</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_net</span><span class="p">()</span><span class="w"></span>
 
 <span class="w">    </span><span class="n">ans</span><span class="p">,</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arping</span><span class="p">(</span><span class="n">net</span><span class="p">)</span><span class="w"></span>
 
 <span class="w">    </span><span class="n">hosts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">r.psrc for _, r in ans.res</span><span class="o">]</span><span class="w"></span>
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">hosts</span><span class="w"></span>
+</code></pre></div>
+
+
+</details>
+<h3 id="shutdown_host">shutdown_host</h3>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span> <span class="nf">shutdown_host</span><span class="p">(</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">login</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="p">)</span>
+</code></pre></div>
+
+
+<details class="example"><summary>View Source</summary><div class="codehilite"><pre><span></span><code><span class="n">def</span><span class="w"> </span><span class="n">shutdown_host</span><span class="p">(</span><span class="k">host</span><span class="err">:</span><span class="w"> </span><span class="nf">str</span><span class="p">,</span><span class="w"> </span><span class="nl">login</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"> </span><span class="nl">password</span><span class="p">:</span><span class="w"> </span><span class="n">Optional</span><span class="o">[</span><span class="n">str</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">None</span><span class="p">,</span><span class="w"></span>
+
+<span class="w">                  </span><span class="nl">port</span><span class="p">:</span><span class="w"> </span><span class="nc">int</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">22</span><span class="p">)</span><span class="err">:</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">remote_exec_command</span><span class="p">(</span><span class="s1">&#39;shutdown now&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="n">login</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">,</span><span class="w"> </span><span class="n">sudo</span><span class="o">=</span><span class="k">True</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 
 
@@ -1354,7 +1430,7 @@
 <div class="codehilite"><pre><span></span><code><span class="k">class</span> <span class="nc">RemoteExecError</span><span class="p">(</span>
     <span class="n">code</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">reason</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">details</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="nb">any</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">NoneType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">details</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="o">&lt;</span><span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">function</span> <span class="nb">any</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span>
 </code></pre></div>
 

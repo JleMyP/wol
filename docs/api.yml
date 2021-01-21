@@ -72,15 +72,12 @@ paths:
                   description: IP address or hostname of a remote host
                 port:
                   type: integer
-                  default: 22
                   description: SSH port
                 login:
                   type: string
-                  required: true
                   description: SSH login
                 password:
                   type: string
-                  required: true
                   description: SSH password
       responses:
         200:
@@ -160,15 +157,42 @@ paths:
                   description: IP address or hostname of a remote host
                 port:
                   type: integer
-                  default: 22
                   description: SSH port
                 login:
                   type: string
-                  required: true
                   description: SSH login
                 password:
                   type: string
+                  description: SSH password
+      responses:
+        204:
+          description: ok
+
+  /api/shutdown/:
+    post:
+      summary: immediately shutdown a remote host (ssh)
+      operationId: shutdown
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
                   required: true
+                  description: IP address or hostname of a remote host
+                port:
+                  type: integer
+                  description: SSH port
+                login:
+                  type: string
+                  description: SSH login
+                password:
+                  type: string
                   description: SSH password
       responses:
         204:

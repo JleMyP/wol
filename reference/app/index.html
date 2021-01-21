@@ -197,19 +197,31 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href="../../cli/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
-    <label class="md-nav__link" for="nav-2">
+    <label class="md-nav__link" for="nav-3">
       Reference
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Reference" data-md-level="1">
-      <label class="md-nav__title" for="nav-2">
+      <label class="md-nav__title" for="nav-3">
         <span class="md-nav__icon md-icon"></span>
         Reference
       </label>
@@ -225,14 +237,14 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1" checked>
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1" checked>
     
-    <label class="md-nav__link" for="nav-2-1">
+    <label class="md-nav__link" for="nav-3-1">
       App
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="App" data-md-level="2">
-      <label class="md-nav__title" for="nav-2-1">
+      <label class="md-nav__title" for="nav-3-1">
         <span class="md-nav__icon md-icon"></span>
         App
       </label>
@@ -371,14 +383,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-6" type="checkbox" id="nav-2-1-6">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-6" type="checkbox" id="nav-3-1-6">
     
-    <label class="md-nav__link" for="nav-2-1-6">
+    <label class="md-nav__link" for="nav-3-1-6">
       Logic
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Logic" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-6">
+      <label class="md-nav__title" for="nav-3-1-6">
         <span class="md-nav__icon md-icon"></span>
         Logic
       </label>
@@ -433,14 +445,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-7" type="checkbox" id="nav-2-1-7">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-7" type="checkbox" id="nav-3-1-7">
     
-    <label class="md-nav__link" for="nav-2-1-7">
+    <label class="md-nav__link" for="nav-3-1-7">
       Views
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Views" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-7">
+      <label class="md-nav__title" for="nav-3-1-7">
         <span class="md-nav__icon md-icon"></span>
         Views
       </label>
@@ -598,9 +610,19 @@
 
 <span class="kn">from</span> <span class="nn">marshmallow</span> <span class="kn">import</span> <span class="n">ValidationError</span>
 
-<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">core</span>
 
-<span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">core</span><span class="p">,</span> <span class="n">crud</span><span class="p">,</span> <span class="n">pages</span>
+<span class="k">try</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">db</span>
+
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+
+    <span class="n">db</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="k">if</span> <span class="n">db</span><span class="p">:</span>
+
+    <span class="kn">from</span> <span class="nn">.views</span> <span class="kn">import</span> <span class="n">crud</span><span class="p">,</span> <span class="n">pages</span>
 
 <span class="k">def</span> <span class="nf">create_app</span><span class="p">(</span><span class="n">no_db</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
 
@@ -620,9 +642,11 @@
 
         <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">log_level</span><span class="p">(</span><span class="s1">&#39;LOG_LEVEL&#39;</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">))</span>
 
-        <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DATABASE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">,</span> <span class="s1">&#39;postgres://postgres@localhost:5432/wol&#39;</span><span class="p">)</span>
+        <span class="c1"># TODO: треш</span>
 
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">env</span><span class="o">.</span><span class="n">bool</span><span class="p">(</span><span class="s1">&#39;NO_DB&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_db</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">env</span><span class="p">(</span><span class="s1">&#39;NO_DB&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">no_db</span> <span class="ow">and</span> <span class="n">db</span><span class="p">:</span>
+
+            <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;DATABASE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">str</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">,</span> <span class="s1">&#39;postgres://postgres@localhost:5432/wol&#39;</span><span class="p">)</span>
 
             <span class="n">db</span><span class="o">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
 
@@ -693,9 +717,11 @@
 
 <span class="w">        </span><span class="n">logger</span><span class="p">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">env</span><span class="p">.</span><span class="n">log_level</span><span class="p">(</span><span class="s1">&#39;LOG_LEVEL&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">logging</span><span class="p">.</span><span class="n">DEBUG</span><span class="p">))</span><span class="w"></span>
 
-<span class="w">        </span><span class="n">app</span><span class="p">.</span><span class="n">config</span><span class="o">[</span><span class="n">&#39;DATABASE&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="nf">str</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;postgres://postgres@localhost:5432/wol&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="err">#</span><span class="w"> </span><span class="nl">TODO</span><span class="p">:</span><span class="w"> </span><span class="n">треш</span><span class="w"></span>
 
-<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="n">bool</span><span class="p">(</span><span class="s1">&#39;NO_DB&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">False</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nl">no_db</span><span class="p">:</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">env</span><span class="p">(</span><span class="s1">&#39;NO_DB&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">False</span><span class="p">)</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">no_db</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nl">db</span><span class="p">:</span><span class="w"></span>
+
+<span class="w">            </span><span class="n">app</span><span class="p">.</span><span class="n">config</span><span class="o">[</span><span class="n">&#39;DATABASE&#39;</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">env</span><span class="p">.</span><span class="nf">str</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;postgres://postgres@localhost:5432/wol&#39;</span><span class="p">)</span><span class="w"></span>
 
 <span class="w">            </span><span class="n">db</span><span class="p">.</span><span class="n">init_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span><span class="w"></span>
 
@@ -720,6 +746,8 @@
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Response</span><span class="p">(</span><span class="n">status</span><span class="o">=</span><span class="mi">501</span><span class="p">)</span><span class="w"></span>
 
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">app</span><span class="w"></span>
+
+<span class="w">    </span><span class="err">#</span><span class="w"> </span><span class="nl">TODO</span><span class="p">:</span><span class="w"> </span><span class="n">ловить</span><span class="w"> </span><span class="mi">404</span><span class="vm">?</span><span class="w"></span>
 </code></pre></div>
 
 

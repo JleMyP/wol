@@ -271,16 +271,28 @@
       
 
 
+  <li class="md-nav__item">
+    <a href="cli/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
     
-    <label class="md-nav__link" for="nav-2">
+    <label class="md-nav__link" for="nav-3">
       Reference
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Reference" data-md-level="1">
-      <label class="md-nav__title" for="nav-2">
+      <label class="md-nav__title" for="nav-3">
         <span class="md-nav__icon md-icon"></span>
         Reference
       </label>
@@ -294,14 +306,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1" type="checkbox" id="nav-2-1">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1" type="checkbox" id="nav-3-1">
     
-    <label class="md-nav__link" for="nav-2-1">
+    <label class="md-nav__link" for="nav-3-1">
       App
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="App" data-md-level="2">
-      <label class="md-nav__title" for="nav-2-1">
+      <label class="md-nav__title" for="nav-3-1">
         <span class="md-nav__icon md-icon"></span>
         App
       </label>
@@ -375,14 +387,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-6" type="checkbox" id="nav-2-1-6">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-6" type="checkbox" id="nav-3-1-6">
     
-    <label class="md-nav__link" for="nav-2-1-6">
+    <label class="md-nav__link" for="nav-3-1-6">
       Logic
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Logic" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-6">
+      <label class="md-nav__title" for="nav-3-1-6">
         <span class="md-nav__icon md-icon"></span>
         Logic
       </label>
@@ -437,14 +449,14 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-2-1-7" type="checkbox" id="nav-2-1-7">
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-3-1-7" type="checkbox" id="nav-3-1-7">
     
-    <label class="md-nav__link" for="nav-2-1-7">
+    <label class="md-nav__link" for="nav-3-1-7">
       Views
       <span class="md-nav__icon md-icon"></span>
     </label>
     <nav class="md-nav" aria-label="Views" data-md-level="3">
-      <label class="md-nav__title" for="nav-2-1-7">
+      <label class="md-nav__title" for="nav-3-1-7">
         <span class="md-nav__icon md-icon"></span>
         Views
       </label>
@@ -603,7 +615,7 @@
 <p>wake on lan and some useful stuff as web service.</p>
 <h2 id="install">install</h2>
 <div class="codehilite"><pre><span></span><code>pip install poetry
-poetry install
+poetry install --no-dev --extras all
 </code></pre></div>
 
 
@@ -639,6 +651,8 @@ other configurations can be passed wia <code>GUNICORN_CMD_ARGS</code> variable.<
 <h2 id="usage">usage</h2>
 <p><strong>api</strong><br />
 <a href="docs/api.html">api</a></p>
+<p><strong>cli</strong><br />
+<a href="cli/">cli</a></p>
 <h2 id="todo">todo</h2>
 <p>functionality:</p>
 <ul>
@@ -651,6 +665,7 @@ other configurations can be passed wia <code>GUNICORN_CMD_ARGS</code> variable.<
 <li>userless mode</li>
 <li>sync host, hostname, address, login, username, etc</li>
 <li>validate model filling in per model actions</li>
+<li>replace configparser by typer</li>
 <li>extend per model actions</li>
 <li>mass core operations</li>
 <li>mass per model operations</li>
@@ -684,13 +699,13 @@ other configurations can be passed wia <code>GUNICORN_CMD_ARGS</code> variable.<
       <nav class="md-footer-nav__inner md-grid">
         
         
-          <a href="reference/app/decorators/" title="Decorators" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="cli/" title="CLI" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Decorators
+                CLI
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
