@@ -52,6 +52,9 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 **api**  
 [api](docs/api.html)
 
+**cli**  
+[cli](cli/)
+
 
 ## todo
 
@@ -66,6 +69,7 @@ functionality:
   * userless mode
 * sync host, hostname, address, login, username, etc
 * validate model filling in per model actions
+* replace configparser by typer
 * extend per model actions
 * mass core operations
 * mass per model operations
