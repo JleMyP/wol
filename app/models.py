@@ -15,6 +15,7 @@ class Credentials(db.Model):
 
 
 class Target(db.Model):
+    name = CharField()
     host = CharField(null=True)
     mac = CharField(null=True)
     wol_port = IntegerField(null=True)
@@ -25,6 +26,10 @@ class WakeUpSchedule(db.Model):
     enabled = BooleanField(default=True)
     target = ForeignKeyField(Target, backref='wakeup_schedules')
     # TODO: расписание
+
+
+def init_db():
+    db.database.create_tables([Credentials, Target, WakeUpSchedule])
 
 
 for model in (Credentials, Target, WakeUpSchedule):

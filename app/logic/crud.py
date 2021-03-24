@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from flask import abort, make_response
 from marshmallow import Schema, fields
 from peewee import JOIN
 from playhouse.flask_utils import get_object_or_404
@@ -10,6 +11,7 @@ from ..models import Credentials, Target
 from .core import check_host, wakeup_host
 
 __all__ = ['create_target', 'get_target_by_id', 'get_all_targets', 'delete_target_by_id',
+           'get_target_by_name',
            'edit_target_by_id', 'wakeup_target_by_id', 'check_target_by_id',
            'create_credentials', 'get_credentials_by_id', 'get_all_credentials',
            'delete_credentials_by_id', 'edit_credentials_by_id',
@@ -27,6 +29,7 @@ class CredentialsSchema(Schema):
 class TargetSchema(Schema):
     """target (de)serialization"""
     id = fields.Int(dump_only=True)  # noqa: A003, VNE003
+    name = fields.Str()
     host = HostField()
     mac = MacField()
     wol_port = PortField()
@@ -48,15 +51,22 @@ def _edit_object_by_id(model, id_: int, **kwargs):
     obj.save(only=edited_fields)
 
 
-def create_target(host: Optional[str] = None, mac: Optional[str] = None,
+def create_target(name: str, host: Optional[str] = None, mac: Optional[str] = None,
                   wol_port: Optional[int] = None, credentials: Optional[int] = None) -> int:
-    target = Target.create(host=host, mac=mac, wol_port=wol_port, credentials=credentials)
+    target = Target.create(name=name, host=host, mac=mac, wol_port=wol_port,
+                           credentials=credentials)
     return target.id
 
 
 def get_target_by_id(id_: int) -> dict:
     query = Target.select(Target, Credentials).join(Credentials, JOIN.LEFT_OUTER)
     target = get_object_or_404(query, Target.id == id_)
+    return TargetSchema().dump(target)
+
+
+def get_target_by_name(name: str) -> dict:
+    query = Target.select(Target, Credentials).join(Credentials, JOIN.LEFT_OUTER)
+    target = get_object_or_404(query, Target.name == name)
     return TargetSchema().dump(target)
 
 
@@ -75,11 +85,15 @@ def edit_target_by_id(id_: int, **kwargs):
 
 def wakeup_target_by_id(id_: int):
     target = get_object_or_404(Target, Target.id == id_)
+    if not target.mac:
+        abort(make_response({'error': 'empty mac'}, 400))
     wakeup_host(target.mac, port=target.wol_port)
 
 
 def check_target_by_id(id_: int) -> bool:
     target = get_object_or_404(Target, Target.id == id_)
+    if not target.host:
+        abort(make_response({'error': 'empty host'}, 400))
     return check_host(target.host)
 
 

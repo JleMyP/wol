@@ -15,6 +15,7 @@ from ..logic.crud import (
     get_all_targets,
     get_credentials_by_id,
     get_target_by_id,
+    get_target_by_name,
     wakeup_target_by_id,
 )
 
@@ -34,9 +35,13 @@ def create_target_(body: dict):
 
 
 @crud.route('/targets/<int:pk>/', methods=['GET'])
-def get_target(pk: int):
+def get_target_by_id_(pk: int):
     return get_target_by_id(pk)
 
+
+@crud.route('/targets/<name>/', methods=['GET'])
+def get_target_by_name_(name: str):
+    return get_target_by_name(name)
 
 @crud.route('/targets/<int:pk>/', methods=['PUT', 'PATCH'])
 @parse_body(TargetSchema())

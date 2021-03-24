@@ -3,9 +3,11 @@
 входная точка для запуска dev сервера.
 """
 
+import sys
+
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
-from app import create_app
+from app import create_app, models
 
 
 if __name__ == '__main__':
@@ -19,9 +21,19 @@ if __name__ == '__main__':
                         help='run in debug mode')
     parser.add_argument('--no-db', action='store_true', default=False,
                         help='do not use database and disable CRUD api')
+    parser.add_argument('command', choices=('run', 'initdb'), nargs='?', default='run')
 
     args = parser.parse_args()
     app = create_app(no_db=args.no_db)
-    app.run(host=args.bind, port=args.port, debug=args.debug)
+
+    if args.command == 'run':
+        app.run(host=args.bind, port=args.port, debug=args.debug)
+    elif args.command == 'initdb':
+        if args.no_db:
+            print('incompatible command and "--no-db" argument')
+            sys.exit(1)
+        else:
+            models.init_db()
+            print('db initualized')
 else:
     app = create_app()
