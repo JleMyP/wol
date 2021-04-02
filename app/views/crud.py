@@ -43,6 +43,7 @@ def get_target_by_id_(pk: int):
 def get_target_by_name_(name: str):
     return get_target_by_name(name)
 
+
 @crud.route('/targets/<int:pk>/', methods=['PUT', 'PATCH'])
 @parse_body(TargetSchema())
 def update_target(pk: int, body: dict):

@@ -10,6 +10,7 @@ from ..fields import (
 )
 from ..logic.core import (
     RemoteExecError,
+    SshCredentials,
     check_host,
     get_cpu_stat,
     reboot_host,
@@ -58,8 +59,9 @@ def wake(body: dict):
 @parse_body(SshActionSchema())
 def cpu_stat(body: dict):
     """cpu load of remote host (ssh)."""
+    creds = SshCredentials(**body)
     try:
-        stat = get_cpu_stat(**body, precision=3)
+        stat = get_cpu_stat(creds, precision=3)
     except RemoteExecError as e:
         return e.as_dict(), 400
     return stat._asdict()
@@ -69,8 +71,9 @@ def cpu_stat(body: dict):
 @parse_body(SshActionSchema())
 def reboot(body: dict):
     """reboot the remote host (ssh)."""
+    creds = SshCredentials(**body)
     try:
-        reboot_host(**body)
+        reboot_host(creds)
     except RemoteExecError as e:
         return e.as_dict(), 400
     return '', 204
@@ -80,8 +83,9 @@ def reboot(body: dict):
 @parse_body(SshActionSchema())
 def shutdown(body: dict):
     """immediately shutdown the remote host (ssh)."""
+    creds = SshCredentials(**body)
     try:
-        shutdown_host(**body)
+        shutdown_host(creds)
     except RemoteExecError as e:
         return e.as_dict(), 400
     return '', 204

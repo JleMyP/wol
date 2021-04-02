@@ -3,7 +3,6 @@
 import json
 from collections import OrderedDict
 from contextlib import contextmanager
-from dataclasses import dataclass
 from inspect import Parameter, signature
 from typing import Callable, Optional
 
@@ -16,6 +15,7 @@ from pygments.lexers import JsonLexer
 from app.fields import validate_host as _validate_host
 from app.fields import validate_mac as _validate_mac
 from app.logic import core
+from app.logic.core import SshCredentials
 
 app = typer.Typer(help="Wake On Lan and some useful stuff")
 global_opts = {
@@ -23,15 +23,7 @@ global_opts = {
 }
 
 
-@dataclass
-class SshCredentials:
-    host: str
-    port: Optional[int]
-    login: Optional[str]
-    password: Optional[str]
-
-
-def validate(ctx: typer.Context, validator: Callable, value: any):
+def validate(ctx: typer.Context, validator: Callable, value: any) -> any:
     """wrapper, that ignore validation at completion search"""
     if ctx.resilient_parsing:
         return
@@ -53,7 +45,7 @@ def validate_mac(ctx: typer.Context, mac: str) -> Optional[str]:
 
 
 @contextmanager
-def catch_remote_error(verbose: bool):
+def catch_remote_error(verbose: bool) -> None:
     """unified display ssh errors"""
     try:
         yield
@@ -71,7 +63,7 @@ def catch_remote_error(verbose: bool):
         raise typer.Exit(code=1)
 
 
-def replace_ssh_args(func):
+def replace_ssh_args(func) -> Callable:
     """add ssh parameters to command and pass it to the target function as dataclass"""
     def decorated(
             # TODO: path to ssh config and disabling it
@@ -108,14 +100,14 @@ def replace_ssh_args(func):
 @app.callback()
 def global_callback(
         verbose: bool = typer.Option(False, '--verbose', '-v', help="more detailed output"),
-):
+) -> None:
     global_opts['verbose'] = verbose
 
 
 @app.command()
 def check(
         host: str = typer.Argument(..., callback=validate_host, help="remote host. ip or hostname"),
-):
+) -> None:
     """check if host is online (SYN/ACK to 80 port or ping)"""
     result = core.check_host(host)
     if result:
@@ -131,7 +123,7 @@ def wake(
         host: str = typer.Option('255.255.255.255', '--host', '-h',
                                  callback=validate_host, help="ip addr for packet destination"),
         port: int = typer.Option(9, '--port', '-p', min=1, max=2**16 - 1, help="WOL port"),
-):
+) -> None:
     """wake up the host"""
     core.wakeup_host(mac, host, port)
     typer.echo("✨ Magic ✨ packet sent")
@@ -141,10 +133,10 @@ def wake(
 @replace_ssh_args
 def reboot(
         creds: SshCredentials,
-):
+) -> None:
     """reboot a remote host (ssh)"""
     with catch_remote_error(global_opts['verbose']):
-        core.reboot_host(creds.host, creds.login, creds.password, creds.port)
+        core.reboot_host(creds)
 
     typer.secho("reboot started", fg=typer.colors.GREEN)
 
@@ -153,10 +145,10 @@ def reboot(
 @replace_ssh_args
 def shutdown(
         creds: SshCredentials,
-):
+) -> None:
     """immediately shutdown a remote host (ssh)"""
     with catch_remote_error(global_opts['verbose']):
-        core.shutdown_host(creds.host, creds.login, creds.password, creds.port)
+        core.shutdown_host(creds)
 
     typer.secho("shutdown success", fg=typer.colors.GREEN)
 
@@ -166,10 +158,10 @@ def shutdown(
 def stats(
         creds: SshCredentials,
         precision: Optional[int] = typer.Option(None, help="count of numers after point"),
-):
+) -> None:
     """get CPU stats of a remote host (ssh)"""
     with catch_remote_error(global_opts['verbose']):
-        result = core.get_cpu_stat(creds.host, creds.login, creds.password, creds.port, precision)
+        result = core.get_cpu_stat(creds, precision)
 
     fmt = json.dumps(result._asdict(), indent=4)
     fmt = highlight(fmt, JsonLexer(), TerminalFormatter())
@@ -177,7 +169,7 @@ def stats(
 
 
 @app.command()
-def scan():
+def scan() -> None:
     """scan local net by ARP protocol"""
     try:
         results = core.scan_local_net()

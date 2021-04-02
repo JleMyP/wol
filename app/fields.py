@@ -49,9 +49,11 @@ def validate_mac(mac: str) -> None:
         raise ValidationError(f'"{mac}" is not a valid mac')
 
 
-def add_validators(name: str, base: Type[fields.Field],
-                   validators: List[Callable[[any], None]],
-                   doc_string: Optional[str] = None) -> type:  # TODO: Type[fields.Field]
+def add_validators(
+        name: str, base: Type[fields.Field],
+        validators: List[Callable[[any], None]],
+        doc_string: Optional[str] = None,
+) -> type:  # TODO: Type[fields.Field]
     """generate schema field by adding validators to existing field.
 
     :param name: name of a new field.

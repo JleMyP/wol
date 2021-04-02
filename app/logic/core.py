@@ -1,6 +1,7 @@
 import operator
 import os
 import subprocess
+from dataclasses import dataclass
 from numbers import Number
 from typing import (
     Callable,
@@ -44,27 +45,7 @@ ERROR_SSH = 1
 ERROR_EXEC = 2
 
 
-class CpuStatShortBase(NamedTuple):
-    user: float
-    system: float
-    idle: float
-    iowait: float
-
-
-class CpuStatBase(NamedTuple):
-    user: float
-    nice: float
-    system: float
-    idle: float
-    iowait: float
-    irq: float
-    softirq: float
-    steal: float
-    guest: float
-    guest_nice: float
-
-
-class BaseOps(NamedTuple):
+class OperableNamedTuple(NamedTuple):
     @singledispatchmethod
     def _do_op(self, other, op):
         raise TypeError
@@ -96,19 +77,51 @@ class BaseOps(NamedTuple):
         return self._do_op(num, round)
 
 
-class CpuStat(CpuStatBase, BaseOps):
+# can't inherit only OperableNamedTuple or OperableNamedTuple with NamedTuple
+class CpuStatShortBase(NamedTuple):
+    user: float
+    system: float
+    idle: float
+    iowait: float
+
+
+class CpuStatShort(CpuStatShortBase, OperableNamedTuple):
+    pass
+
+
+class CpuStatBase(NamedTuple):
     """CPU load representation"""
-    def short(self):
+    user: float
+    nice: float
+    system: float
+    idle: float
+    iowait: float
+    irq: float
+    softirq: float
+    steal: float
+    guest: float
+    guest_nice: float
+
+    def short(self) -> CpuStatShort:
         return CpuStatShort(user=self.user + self.nice, system=self.system,
                             idle=self.idle, iowait=self.iowait)  # noqa  # TODO: charm, wtf?
 
 
-class CpuStatShort(CpuStatShortBase, BaseOps):
+class CpuStat(CpuStatBase, OperableNamedTuple):
     pass
+
+
+@dataclass
+class SshCredentials:
+    host: str
+    login: Optional[str]
+    password: Optional[str]
+    port: Optional[int] = 22
 
 
 class RemoteExecError(Exception):
     """exception while performing remote operation, e.g. reboot"""
+
     def __init__(self, code: int, reason: str, details: Optional[any] = None):
         self.code = code
         self.reason = reason
@@ -122,15 +135,20 @@ class RemoteExecError(Exception):
         }
 
 
+@dataclass
+class RemoteExecResult:
+    stdout: str
+    stderr: str
+    exit_code: int
+
+
 if fabric:
-    # TODO: extract ssh credentials
-    def remote_exec_command(command: str, host: str, login: Optional[str] = None,
-                            password: Optional[str] = None, port: int = 22,
-                            sudo: bool = False) -> dict:
+    def _remote_exec_command(creds: SshCredentials, command: str, sudo: bool = False) -> RemoteExecResult:
         try:
-            with fabric.Connection(host, login, port, connect_kwargs={'password': password}) as c:
+            with fabric.Connection(creds.host, creds.login, creds.port,
+                                   connect_kwargs={'password': creds.password}) as c:
                 if sudo:
-                    res = c.sudo(command, warn=True, hide=True, password=password)
+                    res = c.sudo(command, warn=True, hide=True, password=creds.password)
                 else:
                     res = c.run(command, warn=True, hide=True)
         except NoValidConnectionsError:
@@ -140,27 +158,24 @@ if fabric:
         if res.exited:
             raise RemoteExecError(ERROR_EXEC, "can't exec command",
                                   {'out': res.stdout, 'err': res.stderr})
-        as_dict = vars(res)
-        as_dict.pop('connection')
-        return as_dict
+        return RemoteExecResult(stdout=res.stdout, stderr=res.stderr, exit_code=res.exited)
 else:
-    def remote_exec_command(*args, **kwargs):
+    def _remote_exec_command(*args, **kwargs):
         raise NotImplementedError
 
 
-def get_cpu_stat(host: str, login: Optional[str] = None, password: Optional[str] = None,
-                 port: int = 22, precision: Optional[int] = None) -> CpuStat:
+def get_cpu_stat(creds: SshCredentials, precision: Optional[int] = None) -> CpuStat:
     # TODO: add memory information
     cmd = 'head -1 /proc/stat && sleep 1 > /dev/null && head -1 /proc/stat'
-    res = remote_exec_command(cmd, host, login, password, port)
-    l1, l2, *_ = res['stdout'].split('\n')
-    stat = get_delta_from_str(l1, l2)
+    res = _remote_exec_command(creds, cmd)
+    l1, l2, *_ = res.stdout.split('\n')
+    stat = _get_delta_from_str(l1, l2)
     if precision:
         stat = round(stat, precision)
     return stat
 
 
-def get_delta_from_str(s1: str, s2: str) -> CpuStat:
+def _get_delta_from_str(s1: str, s2: str) -> CpuStat:
     measure1 = CpuStat(*map(int, s1.split()[1:]))
     measure2 = CpuStat(*map(int, s2.split()[1:]))
     diff = measure2 - measure1
@@ -168,12 +183,12 @@ def get_delta_from_str(s1: str, s2: str) -> CpuStat:
     return diff / full * 100
 
 
-def can_use_scapy() -> bool:
+def _can_use_scapy() -> bool:
     return os.geteuid() == 0 and scapy is not None
 
 
 def check_host(host: str, port: Optional[int] = 80) -> bool:
-    if can_use_scapy():
+    if _can_use_scapy():
         return check_host_scapy(host, port=port)
     return check_host_ping(host)
 
@@ -192,7 +207,7 @@ def check_host_ping(host: str) -> bool:
     return proc.returncode == 0
 
 
-def wakeup_host(mac: str, host: str = '255.255.255.255', port: int = 9):
+def wakeup_host(mac: str, host: str = '255.255.255.255', port: int = 9) -> None:
     # scapy:
     #     from scapy.sendrecv import send
     #     from scapy.layers.inet import IP, UDP
@@ -203,20 +218,20 @@ def wakeup_host(mac: str, host: str = '255.255.255.255', port: int = 9):
     send_magic_packet(mac, ip_address=host, port=port)
 
 
-def reboot_host(host: str, login: Optional[str] = None, password: Optional[str] = None,
-                port: int = 22):
-    remote_exec_command('reboot', host, login, password, port, sudo=True)
+def reboot_host(creds: SshCredentials, sudo: bool = True) -> None:
+    _remote_exec_command(creds, 'reboot', sudo)
 
 
-def shutdown_host(host: str, login: Optional[str] = None, password: Optional[str] = None,
-                  port: int = 22):
-    remote_exec_command('shutdown now', host, login, password, sudo=True)
+def shutdown_host(creds: SshCredentials, sudo: bool = True) -> None:
+    _remote_exec_command(creds, 'shutdown now', sudo)
 
 
 def scan_local_net(net: Optional[str] = None) -> List[str]:
     """get hosts from local net by ARP protocol."""
-    # TODO: select network interface w/o mask
-    if not can_use_scapy():
+    # TODO: select network interface w/o mask - get mask from adapter
+    # TODO: select network interface by unique prefix
+    # TODO: error, if net is not provided and multiple interfaces found
+    if not _can_use_scapy():
         raise NotImplementedError
 
     if not net:
@@ -228,9 +243,8 @@ def scan_local_net(net: Optional[str] = None) -> List[str]:
 
 def get_net() -> str:
     """find network interface/mask, that has access to the Internet."""
-    # TODO: or find default gw
-    #  iface - route net = 0, mask = 0
-    #  net/mask - out = iface, mask != ffffffff
+    # TODO: need rework
+    #  can find multiple interfaces
     for network, netmask, _, interface, address, _ in scapy.config.conf.route.routes:
         if network == 0 or interface == 'lo' or address in ('127.0.0.1', '0.0.0.0'):  # noqa: S104
             continue

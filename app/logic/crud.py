@@ -17,6 +17,8 @@ __all__ = ['create_target', 'get_target_by_id', 'get_all_targets', 'delete_targe
            'delete_credentials_by_id', 'edit_credentials_by_id',
            'TargetSchema', 'CredentialsSchema']
 
+# TODO: drop flask deps
+
 
 class CredentialsSchema(Schema):
     """credentials (de)serialization"""
@@ -36,12 +38,12 @@ class TargetSchema(Schema):
     credentials = fields.Nested(CredentialsSchema())
 
 
-def _delete_object(model, id_: int):
+def _delete_object(model, id_: int) -> None:
     obj = get_object_or_404(model, model.id == id_)
     obj.delete_instance()
 
 
-def _edit_object_by_id(model, id_: int, **kwargs):
+def _edit_object_by_id(model, id_: int, **kwargs) -> None:
     obj = get_object_or_404(model, model.id == id_)
     edited_fields = []
     for field_name, value in kwargs.items():
@@ -51,8 +53,13 @@ def _edit_object_by_id(model, id_: int, **kwargs):
     obj.save(only=edited_fields)
 
 
-def create_target(name: str, host: Optional[str] = None, mac: Optional[str] = None,
-                  wol_port: Optional[int] = None, credentials: Optional[int] = None) -> int:
+def create_target(
+        name: str,
+        host: Optional[str] = None,
+        mac: Optional[str] = None,
+        wol_port: Optional[int] = None,
+        credentials: Optional[int] = None,
+) -> int:
     target = Target.create(name=name, host=host, mac=mac, wol_port=wol_port,
                            credentials=credentials)
     return target.id
@@ -70,20 +77,20 @@ def get_target_by_name(name: str) -> dict:
     return TargetSchema().dump(target)
 
 
-def get_all_targets():
+def get_all_targets() -> List[dict]:
     query = Target.select(Target, Credentials).join(Credentials, JOIN.LEFT_OUTER)
     return TargetSchema(many=True).dump(query)
 
 
-def delete_target_by_id(id_: int):
+def delete_target_by_id(id_: int) -> None:
     _delete_object(Target, id_)
 
 
-def edit_target_by_id(id_: int, **kwargs):
+def edit_target_by_id(id_: int, **kwargs) -> None:
     _edit_object_by_id(Target, id_, **kwargs)
 
 
-def wakeup_target_by_id(id_: int):
+def wakeup_target_by_id(id_: int) -> None:
     target = get_object_or_404(Target, Target.id == id_)
     if not target.mac:
         abort(make_response({'error': 'empty mac'}, 400))
@@ -97,8 +104,11 @@ def check_target_by_id(id_: int) -> bool:
     return check_host(target.host)
 
 
-def create_credentials(username: str, password: Optional[str] = None,
-                       pkey: Optional[str] = None) -> int:
+def create_credentials(
+        username: str,
+        password: Optional[str] = None,
+        pkey: Optional[str] = None,
+) -> int:
     credentials = Credentials.create(username=username, password=password, pkey=pkey)
     return credentials.id
 
@@ -113,11 +123,11 @@ def get_all_credentials() -> List[dict]:
     return list(qs.dicts())
 
 
-def delete_credentials_by_id(id_: int):
+def delete_credentials_by_id(id_: int) -> None:
     _delete_object(Credentials, id_)
 
 
-def edit_credentials_by_id(id_: int, **kwargs):
+def edit_credentials_by_id(id_: int, **kwargs) -> None:
     _edit_object_by_id(Credentials, id_, **kwargs)
 
 
