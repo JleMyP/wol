@@ -11,6 +11,7 @@ wakeonlan = "^1.1"
 marshmallow = "^3.5.2"
 validators = "^0.14.3"
 
+cryptography = { version = "3.3.2", optional = true }
 fabric = { version = "^2.5", markers = "platform_machine != 'mips'", optional = true } # can't build pynacli
 
 scapy = { version = "^2.4.3", optional = true }
@@ -27,13 +28,13 @@ typer = { version = "^0.3.2", optional = true }
 Pygments = { version = "^2.7.4", optional = true }
 
 [tool.poetry.extras]
-ssh = ["fabric"]
+ssh = ["fabric", "cryptography"]
 scapy = ["scapy"]
 db = ["psycopg2-binary", "peewee"]
 web = ["gunicorn", "flask", "configargparse", "environs"]
 cli = ["typer", "Pygments"]
 all = [
-  "fabric",
+  "fabric", "cryptography",
   "scapy",
   "psycopg2-binary", "peewee",
   "gunicorn", "flask", "configargparse", "environs",
