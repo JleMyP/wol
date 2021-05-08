@@ -1,0 +1,36 @@
+ARG PYTHON_TAG=3.9-alpine3.13
+
+FROM python:$PYTHON_TAG as builder
+
+RUN apk add gcc musl-dev libffi-dev openssl-dev make postgresql-dev \
+  && CRYPTOGRAPHY_DONT_BUILD_RUST=1 pip install "poetry>=1.1.4" wheel
+COPY pyproject.toml poetry.lock ./
+RUN mkdir /wheels \
+  && poetry export -f requirements.txt -o /wheels/r.txt --without-hashes -E all \
+  && pip wheel -r /wheels/r.txt -w /wheels
+
+
+FROM python:$PYTHON_TAG
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN --mount=from=builder,source=/wheels,target=/wheels pip install -r /wheels/r.txt -f /wheels
+WORKDIR /app
+COPY wol wol
+
+RUN addgroup -S appgroup \
+  && adduser -S appuser -G appgroup \
+  && chmod u+s /bin/ping  # allow non-root users use ping
+# because of this, we can't use scapy lib
+USER appuser
+
+ARG GIT_COMMIT_SHORT
+ENV GIT_COMMIT_SHORT $GIT_COMMIT_SHORT
+ARG GIT_COMMIT_TITLE
+ENV GIT_COMMIT_TITLE $GIT_COMMIT_TITLE
+
+ARG PORT=5000
+ENV PORT $PORT
+
+CMD ["gunicorn", "--access-logfile", "-", "-n", "wol", "wol.wsgi:create_app()"]

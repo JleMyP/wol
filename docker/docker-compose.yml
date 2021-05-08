@@ -1,10 +1,10 @@
 version: "3.7"
 
 x-defaults: &defaults
-   inage: wol
+   image: wol
    build:
        context: ../
-       dockerfile: docker/Dockerfile-prod
+       dockerfile: docker/Dockerfile.prod
    environment:
        REDIS_URL: redis://redis:6379/0
        RQ_SCHEDULER_INTERVAL: 60

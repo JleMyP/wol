@@ -18,3 +18,28 @@ jobs:
       - run: poetry install -E all
       - run: python -m typer_cli wol.cli utils docs --name wol-cli --output cli.md
       - run: portray on_github_pages -f
+
+  docker:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          username: JleMyP
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: docker/Dockerfile.prod
+          registry: ghcr.io
+          name: JleMyP/wol
+          tag_names: true
+          cache: true
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          username: JleMyP
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: docker/Dockerfile.prod
+          registry: docker.pkg.github.com
+          name: JleMyP/wol/wol
+          tag_names: true
+          cache: true

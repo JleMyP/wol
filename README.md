@@ -43,8 +43,13 @@ poetry run gunicorn --access-logfile - 'wol.wsgi:create_app()'
 ## docker launch
 
 ```bash
-docker build -t wol -f docker/Dockerfile-prod .
+docker build -t wol -f docker/Dockerfile.prod .
 docker run --rm -ti -p 5000:5000 wol
+```
+
+or for use syn/ack tcp packets instead of ping for checking host:
+```shell
+docker run --rm -u root -p 5000:5000 wol
 ```
 
 port can be passed at the build stage - `--build-arg PORT=8000`,

@@ -1,2 +1,6 @@
-.git
-.idea
+!pyproject.toml
+!poetry.lock
+!wol
+
+**/*.pyc
+**/__pycache__

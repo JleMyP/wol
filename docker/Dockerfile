@@ -1,16 +1,17 @@
-FROM python:3.8-alpine3.12
+FROM python:3.9-alpine3.13
 
-RUN apk add gcc musl-dev libffi-dev openssl-dev make \
-  && pip install poetry
+ENV PYTHONUNBUFFERED 1
+
+RUN apk add gcc musl-dev libffi-dev openssl-dev make postgresql-dev \
+  && CRYPTOGRAPHY_DONT_BUILD_RUST=1 pip install poetry
 RUN poetry config virtualenvs.create false
 
 WORKDIR /app
-COPY pyproject.toml poetry.lock* ./
-RUN poetry install
+COPY pyproject.toml poetry.lock ./
+RUN poetry install -E all
 
-COPY . .
+COPY wol wol
 
-ENV PYTHONUNBUFFERED 1
 EXPOSE 5000
 
 CMD ["python", "-m", "wol.wsgi", "-d", "-b", "0.0.0.0"]
