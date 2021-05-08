@@ -59,7 +59,7 @@ include_trailing_comma = true
 force_grid_wrap = 4
 
 [tool.portray]
-modules = ["app"]
+modules = ["wol.app"]
 
 [build-system]
 requires = ["poetry>=1.0"]
