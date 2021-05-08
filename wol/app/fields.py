@@ -9,7 +9,11 @@ from typing import (
     Type,
 )
 
-from fabric.config import Config
+try:
+    from fabric.config import Config
+except ImportError:
+    Config = None
+
 from marshmallow import ValidationError, fields, validate
 from validators import (
     domain,
@@ -36,6 +40,9 @@ def validate_host(host: str) -> None:
         if validator(host) is True:
             break
     else:
+        if not Config:
+            return
+
         patterns = Config().base_ssh_config.get_hostnames()
         # TODO: more complex filter
         known_hosts = [p for p in patterns if '*' not in p]
