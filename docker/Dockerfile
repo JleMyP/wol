@@ -13,4 +13,4 @@ COPY . .
 ENV PYTHONUNBUFFERED 1
 EXPOSE 5000
 
-CMD ["python", "main.py", "-d", "-b", "0.0.0.0"]
+CMD ["python", "-m", "wol.wsgi", "-d", "-b", "0.0.0.0"]

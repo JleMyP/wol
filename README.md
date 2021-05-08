@@ -11,10 +11,17 @@ poetry install --no-dev --extras all
 ## dev launch
 
 ```bash
-poetry run python main.py
+poetry run wol-dev-server
 ```
 
-to get command-line arguments type `python main.py -h`.  
+or
+
+```
+poetry shell
+python -m wol.wsgi
+```
+
+to get command-line arguments type `python -m wol.wsgi -h`.  
 
 **arguments**  
 * `--bind`, `-b` - listen interface address. default - 127.0.0.1;  
@@ -24,13 +31,13 @@ to get command-line arguments type `python main.py -h`.
 
 
 arguments also can be passed through env vars prefixed by `WOL_`,
-example - `WOL_PORT=3000 python main.py`.  
+example - `WOL_PORT=3000 python -m wol.wsgi`.  
 
 
 ## more seriously launch
 
 ```
-poetry run gunicorn --access-logfile - app:app
+poetry run gunicorn --access-logfile - 'wol.wsgi:create_app()'
 ```
 
 ## docker launch
@@ -67,7 +74,7 @@ functionality:
 * configuration
   * sentry dsn
   * userless mode
-* sync host, hostname, address, login, username, etc
+* sync names: host, hostname, address, login, username, etc
 * validate model filling in per model actions
 * replace configparser by typer
 * extend per model actions

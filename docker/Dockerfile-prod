@@ -31,4 +31,4 @@ ENV PORT $PORT
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-CMD ["gunicorn", "--access-logfile", "-", "-n", "wol", "app:app"]
+CMD ["gunicorn", "--access-logfile", "-", "-n", "wol", "wol.wsgi:create_app()"]

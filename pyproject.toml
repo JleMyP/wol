@@ -30,7 +30,7 @@ Pygments = { version = "^2.7.4", optional = true }
 ssh = ["fabric"]
 scapy = ["scapy"]
 db = ["psycopg2-binary", "peewee"]
-web ["gunicorn", "flask", "configargparse", "environs"]
+web = ["gunicorn", "flask", "configargparse", "environs"]
 cli = ["typer", "Pygments"]
 all = [
   "fabric",
@@ -60,9 +60,11 @@ force_grid_wrap = 4
 
 [tool.portray]
 modules = ["app"]
+
 [build-system]
 requires = ["poetry>=1.0"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-wol-cli = "app.cli:app"
+wol-cli = "wol.cli:app"
+wol-dev-server = "wol.wsgi:dev_server"
