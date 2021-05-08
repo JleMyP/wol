@@ -4,24 +4,16 @@ wake on lan and some useful stuff as web service.
 ## install
 
 ```bash
-pip install poetry
-poetry install --no-dev --extras all
+pip install git+https://github.com/JleMyP/wol.git#egg=wol[all]
 ```
 
-## dev launch
+## launch dev web server
 
 ```bash
-poetry run wol-dev-server
+wol-dev-server
 ```
 
-or
-
-```
-poetry shell
-python -m wol.wsgi
-```
-
-to get command-line arguments type `python -m wol.wsgi -h`.  
+to get command-line arguments type `wol-dev-server -h`.
 
 **arguments**  
 * `--bind`, `-b` - listen interface address. default - 127.0.0.1;  
@@ -37,19 +29,19 @@ example - `WOL_PORT=3000 python -m wol.wsgi`.
 ## more seriously launch
 
 ```
-poetry run gunicorn --access-logfile - 'wol.wsgi:create_app()'
+gunicorn --access-logfile - 'wol.wsgi:create_app()'
 ```
 
 ## docker launch
 
 ```bash
-docker build -t wol -f docker/Dockerfile.prod .
-docker run --rm -ti -p 5000:5000 wol
+docker run --rm -ti -p 5000:5000 ghcr.io/jlemyp/wol
 ```
 
 or for use syn/ack tcp packets instead of ping for checking host:
+
 ```shell
-docker run --rm -u root -p 5000:5000 wol
+docker run --rm -u root -p 5000:5000 ghcr.io/jlemyp/wol
 ```
 
 port can be passed at the build stage - `--build-arg PORT=8000`,
@@ -94,4 +86,3 @@ operability:
 * sentry
 * tests
   * ci
-* github actions - build image
