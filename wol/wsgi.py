@@ -7,10 +7,10 @@ import sys
 
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
-from app import create_app, models
+from .app import create_app, models
 
 
-if __name__ == '__main__':
+def dev_server():
     parser = ArgumentParser(
         auto_env_var_prefix='WOL_',
         formatter_class=ArgumentDefaultsHelpFormatter,
@@ -35,5 +35,7 @@ if __name__ == '__main__':
         else:
             models.init_db()
             print('db initualized')
-else:
-    app = create_app()
+
+
+if __name__ == '__main__':
+    dev_server()

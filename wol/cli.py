@@ -12,10 +12,10 @@ from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import JsonLexer
 
-from app.fields import validate_host as _validate_host
-from app.fields import validate_mac as _validate_mac
-from app.logic import core
-from app.logic.core import SshCredentials
+from .app.fields import validate_host as _validate_host
+from .app.fields import validate_mac as _validate_mac
+from .app.logic import core
+from .app.logic.core import SshCredentials
 
 app = typer.Typer(help="Wake On Lan and some useful stuff")
 global_opts = {
