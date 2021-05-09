@@ -7,15 +7,15 @@ authors = []
 [tool.poetry.dependencies]
 python = "^3.7"
 singledispatchmethod = { version = "^1.0", python = "~3.7.0" }
-wakeonlan = "^1.1"
+wakeonlan = "^2.0.1"
 marshmallow = "^3.5.2"
-validators = "^0.14.3"
-environs = "^8.0.0"
+validators = "^0.18.2"
+environs = "^9.3.2"
 
 cryptography = { version = "3.3.2", optional = true }
 fabric = { version = "^2.5", markers = "platform_machine != 'mips'", optional = true } # can't build pynacli
 
-scapy = { version = "^2.4.3", optional = true }
+scapy = { version = "^2.4.5", optional = true }
 
 peewee = { version = "^3.13.3", optional = true }
 psycopg2-binary = { version = "^2.8.5", optional = true }
@@ -45,12 +45,11 @@ all = [
 ipython = "^7.5"
 flask-shell-ipython = "^0.4.1"
 portray = "^1.4.0"
-pytest = "^3.0"
-flake8-isort = "^3.0.0"
+flake8-isort = "^4.0.0"
 flake8-bandit = "^2.1.2"
-flake8-bugbear = "^20.1.4"
+flake8-bugbear = "^21.4.3"
 flake8-builtins = "^1.5.3"
-flake8-variables-names = "^0.0.3"
+flake8-variables-names = "^0.0.4"
 typer-cli = "^0.0.11"
 
 [tool.isort]
