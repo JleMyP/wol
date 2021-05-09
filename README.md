@@ -1,6 +1,15 @@
 # wol
 Wake on Lan and some useful stuff as web service.
 
+[![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
+![code factor](https://img.shields.io/codefactor/grade/github/JleMyP/wol)
+![cc maintainability](https://img.shields.io/codeclimate/maintainability-percentage/JleMyP/wol)
+![cc issues](https://img.shields.io/codeclimate/issues/JleMyP/wol)
+
+![ci](https://img.shields.io/github/workflow/status/JleMyP/wol/ci/master?label=lint)
+![docs](https://img.shields.io/github/workflow/status/JleMyP/wol/release/master?label=build)
+![release](https://img.shields.io/github/v/release/JleMyP/wol)
+
 ## install
 
 ```shell
