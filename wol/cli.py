@@ -179,7 +179,7 @@ def scan() -> None:
         raise typer.Exit(code=1)
 
     if results:
-        typer.echo("results:\n" + '\n'.join(results))
+        typer.echo("results:\n" + '\n'.join(f'{pair["ip"]} \t| {pair["mac"]}' for pair in results))
     else:
         typer.echo("no results")
 

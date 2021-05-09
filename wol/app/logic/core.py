@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from numbers import Number
 from typing import (
     Callable,
+    Dict,
     Iterable,
     List,
     NamedTuple,
@@ -226,8 +227,8 @@ def shutdown_host(creds: SshCredentials, sudo: bool = True) -> None:
     _remote_exec_command(creds, 'shutdown now', sudo)
 
 
-def scan_local_net(net: Optional[str] = None) -> List[str]:
-    """get hosts from local net by ARP protocol."""
+def scan_local_net(net: Optional[str] = None) -> List[Dict[str, str]]:
+    """get hosts (ip, mac) from local net by ARP protocol."""
     # TODO: select network interface w/o mask - get mask from adapter
     # TODO: select network interface by unique prefix
     # TODO: error, if net is not provided and multiple interfaces found
@@ -237,7 +238,7 @@ def scan_local_net(net: Optional[str] = None) -> List[str]:
     if not net:
         net = get_net()
     ans, _ = arping(net)
-    hosts = [r.psrc for _, r in ans.res]
+    hosts = [{'ip': r.psrc, 'mac': r.hwsrc} for _, r in ans.res]
     return hosts
 
 

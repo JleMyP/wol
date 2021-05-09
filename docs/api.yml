@@ -135,7 +135,12 @@ paths:
                   hosts:
                     type: array
                     items:
-                      type: string
+                      type: object
+                      properties:
+                        ip:
+                          type: string
+                        mac:
+                          type: string
                     description: list of hosts ip addresses
 
   /api/reboot/:
