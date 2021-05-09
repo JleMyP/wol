@@ -29,6 +29,8 @@ try:
     from scapy.sendrecv import sr1
 except Exception:
     scapy = None
+else:
+    scapy.config.conf.verb = 0
 
 try:
     import fabric
