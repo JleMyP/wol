@@ -1,11 +1,11 @@
-# `./cli.py`
+# `wol-cli`
 
 Wake On Lan and some useful stuff
 
 **Usage**:
 
 ```console
-$ ./cli.py [OPTIONS] COMMAND [ARGS]...
+$ wol-cli [OPTIONS] COMMAND [ARGS]...
 ```
 
 **Options**:
@@ -24,14 +24,14 @@ $ ./cli.py [OPTIONS] COMMAND [ARGS]...
 * `stats`: get CPU stats of a remote host (ssh)
 * `wake`: wake up the host
 
-## `./cli.py check`
+## `wol-cli check`
 
 check if host is online (SYN/ACK to 80 port or ping)
 
 **Usage**:
 
 ```console
-$ ./cli.py check [OPTIONS] HOST
+$ wol-cli check [OPTIONS] HOST
 ```
 
 **Arguments**:
@@ -42,14 +42,14 @@ $ ./cli.py check [OPTIONS] HOST
 
 * `--help`: Show this message and exit.
 
-## `./cli.py reboot`
+## `wol-cli reboot`
 
 reboot a remote host (ssh)
 
 **Usage**:
 
 ```console
-$ ./cli.py reboot [OPTIONS] HOST
+$ wol-cli reboot [OPTIONS] HOST
 ```
 
 **Arguments**:
@@ -63,28 +63,28 @@ $ ./cli.py reboot [OPTIONS] HOST
 * `-p, --port INTEGER RANGE`: ssh port. default - 22 or from ssh config
 * `--help`: Show this message and exit.
 
-## `./cli.py scan`
+## `wol-cli scan`
 
 scan local net by ARP protocol
 
 **Usage**:
 
 ```console
-$ ./cli.py scan [OPTIONS]
+$ wol-cli scan [OPTIONS]
 ```
 
 **Options**:
 
 * `--help`: Show this message and exit.
 
-## `./cli.py shutdown`
+## `wol-cli shutdown`
 
 immediately shutdown a remote host (ssh)
 
 **Usage**:
 
 ```console
-$ ./cli.py shutdown [OPTIONS] HOST
+$ wol-cli shutdown [OPTIONS] HOST
 ```
 
 **Arguments**:
@@ -98,14 +98,14 @@ $ ./cli.py shutdown [OPTIONS] HOST
 * `-p, --port INTEGER RANGE`: ssh port. default - 22 or from ssh config
 * `--help`: Show this message and exit.
 
-## `./cli.py stats`
+## `wol-cli stats`
 
 get CPU stats of a remote host (ssh)
 
 **Usage**:
 
 ```console
-$ ./cli.py stats [OPTIONS] HOST
+$ wol-cli stats [OPTIONS] HOST
 ```
 
 **Arguments**:
@@ -120,14 +120,14 @@ $ ./cli.py stats [OPTIONS] HOST
 * `--precision INTEGER`: count of numers after point
 * `--help`: Show this message and exit.
 
-## `./cli.py wake`
+## `wol-cli wake`
 
 wake up the host
 
 **Usage**:
 
 ```console
-$ ./cli.py wake [OPTIONS] MAC
+$ wol-cli wake [OPTIONS] MAC
 ```
 
 **Arguments**:

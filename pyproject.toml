@@ -1,8 +1,19 @@
 [tool.poetry]
 name = "wol"
 version = "0.1.0"
-description = ""
-authors = []
+description = "Wake on Lan and some useful stuff as web service."
+authors = ["JleMyP"]
+license = "WTFPL"
+readme = "README.md"
+
+homepage = "https://github.com/JleMyP/wol"
+repository = "https://github.com/JleMyP/wol"
+documentation = "https://jlemyp.github.io/wol/"
+
+packages = [
+    { include = "wol" },
+]
+keywords = ["wakeonlan", "wake-on-lan", "wol"]
 
 [tool.poetry.dependencies]
 python = "^3.7"

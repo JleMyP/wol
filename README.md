@@ -1,15 +1,21 @@
 # wol
-wake on lan and some useful stuff as web service.
+Wake on Lan and some useful stuff as web service.
 
 ## install
 
-```bash
+```shell
 pip install git+https://github.com/JleMyP/wol.git#egg=wol[all]
+```
+
+for using as cli tool, i recommend use pipx
+
+```shell
+pipx install git+https://github.com/JleMyP/wol.git#egg=wol[cli,ssh,scapy]
 ```
 
 ## launch dev web server
 
-```bash
+```shell
 wol-dev-server
 ```
 
@@ -28,13 +34,13 @@ example - `WOL_PORT=3000 python -m wol.wsgi`.
 
 ## more seriously launch
 
-```
+```shell
 gunicorn --access-logfile - 'wol.wsgi:create_app()'
 ```
 
 ## docker launch
 
-```bash
+```shell
 docker run --rm -ti -p 5000:5000 ghcr.io/jlemyp/wol
 ```
 
@@ -53,10 +59,7 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 
 ## usage
 
-**api**  
-[api](docs/api.html)
-
-**cli**  
+[api](docs/api.html)  
 [cli](cli/)
 
 
@@ -77,6 +80,7 @@ functionality:
 * extend per model actions
 * mass core operations
 * mass per model operations
+* add hosts from scanning net
 
 operability:
 

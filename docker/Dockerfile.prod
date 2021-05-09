@@ -22,7 +22,7 @@ COPY wol wol
 RUN addgroup -S appgroup \
   && adduser -S appuser -G appgroup \
   && chmod u+s /bin/ping  # allow non-root users use ping
-# because of this, we can't use scapy lib
+# because of this, we can't use scapy lib (ping, scan net)
 USER appuser
 
 ARG GIT_COMMIT_SHORT

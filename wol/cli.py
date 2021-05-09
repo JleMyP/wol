@@ -1,4 +1,7 @@
 #!/bin/env python3
+"""
+входная точка для запуска консольного интерфейса.
+"""
 
 import json
 from collections import OrderedDict
