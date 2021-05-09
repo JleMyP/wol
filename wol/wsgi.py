@@ -3,15 +3,13 @@
 entrypoint for launching dev server.
 """
 
+import logging
 import sys
 
-import logging
-
+from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from environs import Env
 from flask import Flask, Response, jsonify
 from marshmallow import ValidationError
-
-from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 
 from .views import core
 
