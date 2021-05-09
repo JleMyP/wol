@@ -19,3 +19,27 @@ jobs:
           artifacts: "dist/*"
           token: ${{ secrets.GITHUB_TOKEN }}
 
+  docker:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_BUILDKIT: 1
+    steps:
+      - uses: actions/checkout@v2
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          username: JleMyP
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: docker/Dockerfile.prod
+          registry: ghcr.io
+          name: JleMyP/wol
+          tag_names: true
+          cache: true
+      - uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          username: JleMyP
+          password: ${{ secrets.GITHUB_TOKEN }}
+          dockerfile: docker/Dockerfile.prod
+          registry: docker.pkg.github.com
+          name: JleMyP/wol/wol
+          tag_names: true
+          cache: true

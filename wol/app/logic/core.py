@@ -1,6 +1,6 @@
 import operator
 import os
-import subprocess
+import subprocess  # noqa: S404
 from dataclasses import dataclass
 from numbers import Number
 from typing import (
@@ -24,8 +24,8 @@ try:
     import scapy.config
     import scapy.route
     import scapy.utils
-    from scapy.layers.l2 import arping
     from scapy.layers.inet import IP, TCP
+    from scapy.layers.l2 import arping
     from scapy.sendrecv import sr1
 except Exception:
     scapy = None
@@ -34,13 +34,14 @@ else:
 
 try:
     import fabric
-    from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 except ImportError:
     fabric = None
+else:
+    from paramiko.ssh_exception import NoValidConnectionsError, SSHException
 
 from ..doc_utils import exclude_parent_attrs
 
-__all__ = ['CpuStat', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
+__all__ = ['CpuStat', 'SshCredentials', 'check_host', 'reboot_host', 'get_cpu_stat', 'wakeup_host', 'RemoteExecError',
            'scan_local_net', 'shutdown_host']
 
 ERROR_NOT_CONNECTED = 0
@@ -205,7 +206,7 @@ def check_host_scapy(host: str, port: Optional[int] = 80) -> bool:
 
 def check_host_ping(host: str) -> bool:
     cmd = ['ping', '-c', '1', '-W', '2', host]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)  # noqa: S603
     proc.communicate()
     return proc.returncode == 0
 

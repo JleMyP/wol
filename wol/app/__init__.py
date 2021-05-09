@@ -11,8 +11,7 @@ try:
     from .models import db
 except ImportError:
     db = None
-
-if db:
+else:
     from .views import crud, pages
 
 
