@@ -24,7 +24,8 @@ from validators import (
 
 from .doc_utils import exclude_parent_attrs
 
-__all__ = ['IpAddressField', 'HostField', 'PortField', 'MacField']
+__all__ = ['IpAddressField', 'HostField', 'PortField', 'MacField',
+           'validate_ip', 'validate_host', 'validate_mac']
 
 
 def validate_ip(ip: str) -> None:
@@ -57,7 +58,8 @@ def validate_mac(mac: str) -> None:
 
 
 def add_validators(
-        name: str, base: Type[fields.Field],
+        name: str,
+        base: Type[fields.Field],
         validators: List[Callable[[any], None]],
         doc_string: Optional[str] = None,
 ) -> type:  # TODO: Type[fields.Field]
@@ -66,6 +68,7 @@ def add_validators(
     :param name: name of a new field.
     :param base: base field.
     :param validators: list of validators.
+    :param doc_string: documentation for annotating new func.
     :return: a new field with added validators.
     """
     def __init__(self, **kwargs):

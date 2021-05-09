@@ -94,7 +94,7 @@ class CpuStatShort(CpuStatShortBase, OperableNamedTuple):
 
 
 class CpuStatBase(NamedTuple):
-    """CPU load representation"""
+    """CPU load representation."""
     user: float
     nice: float
     system: float
@@ -124,7 +124,7 @@ class SshCredentials:
 
 
 class RemoteExecError(Exception):
-    """exception while performing remote operation, e.g. reboot"""
+    """exception while performing remote operation, e.g. reboot."""
 
     def __init__(self, code: int, reason: str, details: Optional[any] = None):
         self.code = code

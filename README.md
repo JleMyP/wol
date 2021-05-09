@@ -59,8 +59,8 @@ other configurations can be passed wia `GUNICORN_CMD_ARGS` variable.
 
 ## usage
 
-[api](docs/api.html)  
-[cli](cli/)
+[api doc](docs/api.html)  
+[cli doc](cli/)
 
 
 ## todo

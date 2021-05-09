@@ -25,7 +25,7 @@ class Target(db.Model):
 class WakeUpSchedule(db.Model):
     enabled = BooleanField(default=True)
     target = ForeignKeyField(Target, backref='wakeup_schedules')
-    # TODO: расписание
+    # TODO: schedule settings
 
 
 def init_db():

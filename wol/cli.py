@@ -1,6 +1,6 @@
 #!/bin/env python3
 """
-входная точка для запуска консольного интерфейса.
+entrypoint for launching command line interface.
 """
 
 import json
@@ -15,10 +15,10 @@ from pygments import highlight
 from pygments.formatters import TerminalFormatter
 from pygments.lexers import JsonLexer
 
-from .app.fields import validate_host as _validate_host
-from .app.fields import validate_mac as _validate_mac
-from .app.logic import core
-from .app.logic.core import SshCredentials
+from .fields import validate_host as _validate_host
+from .fields import validate_mac as _validate_mac
+from .logic import core
+from .logic.core import SshCredentials
 
 app = typer.Typer(help="Wake On Lan and some useful stuff")
 global_opts = {
@@ -160,7 +160,7 @@ def shutdown(
 @replace_ssh_args
 def stats(
         creds: SshCredentials,
-        precision: Optional[int] = typer.Option(None, help="count of numers after point"),
+        precision: Optional[int] = typer.Option(None, help="count of digits after point"),
 ) -> None:
     """get CPU stats of a remote host (ssh)"""
     with catch_remote_error(global_opts['verbose']):
