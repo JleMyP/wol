@@ -1,0 +1,379 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: WOL API
+paths:
+  /api/check_host/:
+    post:
+      summary: check, if host is online
+      operationId: checkHost
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  required: true
+                  description: IP address or hostname of a remote host
+      responses:
+        200:
+          $ref: "#/components/responses/check"
+
+  /api/wake/:
+    post:
+      summary: Wakeup host by Wake on Lan
+      operationId: wake
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mac:
+                  type: string
+                  required: true
+                  description: MAC address of a remote host
+                host:
+                  type: string
+                  default: 255.255.255.255
+                  description: IP address or hostname of a remote host
+                port:
+                  type: integer
+                  default: 9
+                  description: Wake on Lan port
+      responses:
+        204:
+          description: ok 
+
+  /api/cpu_stat/:
+    post:
+      summary: CPU load of a remote host (ssh)
+      operationId: cpuStat
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  required: true
+                  description: IP address or hostname of a remote host
+                port:
+                  type: integer
+                  description: SSH port
+                login:
+                  type: string
+                  description: SSH login
+                password:
+                  type: string
+                  description: SSH password
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: number
+                    description: time spent in user mode
+                  nice:
+                    type: number
+                    description: time spen in user mode with low priority
+                  system:
+                    type: number
+                    description: time spent in system mode
+                  idle:
+                    type: number
+                    description: time spent in the idle task
+                  iowait:
+                    type: number
+                    description: time waiting for I/O to complete
+                  irq:
+                    type: number
+                    description: time servicing interrupts
+                  softirq:
+                    type: number
+                    description: time servicing softirqs
+                  steal:
+                    type: number
+                    description: stolen time, which is the time spent in other operating systems when running in a virtualized environment
+                  guest:
+                    type: number
+                    description: time spent running a virtual CPU for guest operating systems under the control of the Linux kernel
+                  guest_nice:
+                    type: number
+                    description: time spent running a niced guest
+
+  /api/scan_net/:
+    post:
+      summary: search all hosts in local net
+      operationId: scanNet
+      tags:
+        - core
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hosts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ip:
+                          type: string
+                        mac:
+                          type: string
+                    description: list of hosts ip addresses
+
+  /api/reboot/:
+    post:
+      summary: reboot a remote host (ssh)
+      operationId: reboot
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  required: true
+                  description: IP address or hostname of a remote host
+                port:
+                  type: integer
+                  description: SSH port
+                login:
+                  type: string
+                  description: SSH login
+                password:
+                  type: string
+                  description: SSH password
+      responses:
+        204:
+          description: ok
+
+  /api/shutdown/:
+    post:
+      summary: immediately shutdown a remote host (ssh)
+      operationId: shutdown
+      tags:
+        - core
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                host:
+                  type: string
+                  required: true
+                  description: IP address or hostname of a remote host
+                port:
+                  type: integer
+                  description: SSH port
+                login:
+                  type: string
+                  description: SSH login
+                password:
+                  type: string
+                  description: SSH password
+      responses:
+        204:
+          description: ok
+
+  /api/targets/:
+    get:
+      summary: list of all targets
+      operationId: targetList
+      tags:
+        - target
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/targetOutput"
+    post:
+      summary: create a target
+      operationId: targetCreate
+      tags:
+        - target
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/targetInput"
+      responses:
+        201:
+          description: created
+
+  /api/targets/{id}/:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    get:
+      summary: get a single target
+      operationId: targetRetrieve
+      tags:
+        - target
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/targetOutput"
+    put:
+      summary: replace a target
+      operationId: targetEdit
+      tags:
+        - target
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/targetInput"
+      responses:
+        204:
+          description: ok
+    patch:
+      summary: partial edit a target
+      operationId: targetPartialEdit
+      tags:
+        - target
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/targetInput"
+      responses:
+        204:
+          description: ok
+    delete:
+      summary: delete a target
+      operationId: targetDelete
+      tags:
+        - target
+      responses:
+        204:
+          description: ok
+
+  /api/targets/{id}/wake/:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    post:
+      summary: wakeup a target
+      operationId: targetWake
+      tags:
+        - target
+      responses:
+        204:
+          description: ok
+
+  /api/targets/{id}/check/:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    post:
+      summary: check, if target is online
+      operationId: targetCheck
+      tags:
+        - target
+      responses:
+        200:
+          $ref: "#/components/responses/check"
+
+
+components:
+  schemas:
+    targetInput:
+      type: object
+      properties:
+        host:
+          type: string
+          description: IP address or hostname
+        mac:
+          type: string
+          description: MAC address
+        wol_port:
+          type: integer
+          description: Wake on Lan port
+    targetOutput:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: target id
+        host:
+          type: string
+          description: IP address or hostname
+        mac:
+          type: string
+          description: MAC address
+        wol_port:
+          type: integer
+          description: Wake on Lan port
+        credentials:
+          $ref: "#/components/schemas/credentialsOutput"
+    credentialsOutput:
+      type: object
+      description: SSH access credentials
+      properties:
+        id:
+          type: integer
+          description: credentials id
+        username:
+          type: string
+          description: SSH login
+        password:
+          type: string
+          description: SSH password
+        pkey:
+          type: string
+          description: SSH private key
+
+  parameters:
+    id:
+      name: id
+      in: path
+      required: true
+      description: object id
+      schema:
+        type: integer
+
+  responses:
+    check:
+      description: ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              reached:
+                type: boolean
+                description: is a remote host online
