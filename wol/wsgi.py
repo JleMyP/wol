@@ -5,6 +5,7 @@ entrypoint for launching dev server.
 
 import logging
 import sys
+from typing import Optional
 
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from environs import Env
@@ -22,9 +23,13 @@ else:
     from .views import crud, pages
 
 
-def create_app(no_db: bool = False):
+def create_app(no_db: bool = False, db_url: Optional[str] = None):
+    if db_url is None:
+        db_url = 'sqlite:///db.sqlite'
+
     env = Env()
     env.read_env()
+    # config: log level, db, auth
 
     logger = logging.getLogger(__name__)
     logger.addHandler(logging.StreamHandler(sys.stdout))
@@ -34,9 +39,12 @@ def create_app(no_db: bool = False):
 
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
-        if not env('NO_DB', False) and not no_db and models:  # TODO: shit
-            app.config['DATABASE'] = env.str('DATABASE_URL', 'sqlite://sqlite.db')
-            FlaskDB(app, models.db)
+
+        if not env('NO_DB', no_db) and models:
+            app.config['DATABASE'] = env.str('DATABASE_URL', db_url)
+            fdb = FlaskDB()
+            fdb.database = models.db
+            fdb.init_app(app)
             app.register_blueprint(crud, url_prefix='/api')
             app.register_blueprint(pages)
 
@@ -62,14 +70,14 @@ def dev_server():
     )
     parser.add_argument('--bind', '-b', default='127.0.0.1', help="ip address to listen")
     parser.add_argument('--port', '-p', default=5000, help="port to listen")
-    parser.add_argument('--debug', '-d', action='store_true', default=False,
-                        help="run in debug mode")
-    parser.add_argument('--no-db', action='store_true', default=False,
+    parser.add_argument('--debug', '-d', action='store_true', help="run in debug mode")
+    parser.add_argument('--no-db', action='store_true',
                         help="do not use database and disable CRUD api")
+    parser.add_argument('--db', help="database url")
     parser.add_argument('command', choices=('run', 'initdb'), nargs='?', default='run')
 
     args = parser.parse_args()
-    app = create_app(no_db=args.no_db)
+    app = create_app(no_db=args.no_db, db_url=args.db)
 
     if args.command == 'run':
         app.run(host=args.bind, port=args.port, debug=args.debug)
@@ -77,12 +85,12 @@ def dev_server():
         if args.no_db:
             print("incompatible command and \"--no-db\" argument")
             sys.exit(1)
-        elif not models:
+        if not models:
             print("database deps is not installed (extra \"db\"")
             sys.exit(1)
-        else:
-            models.init_db()
-            print("db initialized")
+
+        models.init_db()
+        print("db initialized")
 
 
 if __name__ == '__main__':

@@ -62,6 +62,7 @@ flake8-bugbear = "^21.4.3"
 flake8-builtins = "^1.5.3"
 flake8-variables-names = "^0.0.4"
 typer-cli = "^0.0.11"
+better-exceptions = "^0.3.3"
 
 [tool.isort]
 line_length = 120

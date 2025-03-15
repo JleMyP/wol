@@ -27,7 +27,7 @@ class Target(DbModel):
     credentials = ForeignKeyField(Credentials, backref='targets', null=True)
 
 
-def connect_db(url: str):
+def setup_connection(url: str):
     db.initialize(connect(url))
 
 
