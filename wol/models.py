@@ -1,20 +1,25 @@
 from peewee import *
-from playhouse.flask_utils import FlaskDB
+from playhouse.db_url import connect
 
 from .doc_utils import exclude_parent_attrs
 
-__all__ = ['db', 'Credentials', 'Target', 'WakeUpSchedule']
+__all__ = ['db', 'Credentials', 'Target']
 
-db = FlaskDB()
+db = DatabaseProxy()
 
 
-class Credentials(db.Model):
+class DbModel(Model):
+    class Meta:
+        database = db
+
+
+class Credentials(DbModel):
     username = CharField()
     password = CharField(null=True)
     pkey = TextField(null=True)
 
 
-class Target(db.Model):
+class Target(DbModel):
     name = CharField()
     host = CharField(null=True)
     mac = CharField(null=True)
@@ -22,15 +27,13 @@ class Target(db.Model):
     credentials = ForeignKeyField(Credentials, backref='targets', null=True)
 
 
-class WakeUpSchedule(db.Model):
-    enabled = BooleanField(default=True)
-    target = ForeignKeyField(Target, backref='wakeup_schedules')
-    # TODO: schedule settings
+def connect_db(url: str):
+    db.initialize(connect(url))
 
 
 def init_db():
-    db.database.create_tables([Credentials, Target, WakeUpSchedule])
+    db.create_tables([Credentials, Target])
 
 
-for model in (Credentials, Target, WakeUpSchedule):
+for model in (Credentials, Target):
     exclude_parent_attrs(model, ('id',))

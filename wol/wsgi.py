@@ -9,6 +9,7 @@ import sys
 from configargparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from environs import Env
 from flask import Flask, Response, jsonify
+from playhouse.flask_utils import FlaskDB
 from marshmallow import ValidationError
 
 from .views import core
@@ -34,8 +35,8 @@ def create_app(no_db: bool = False):
     with env.prefixed('WOL_'):
         logger.setLevel(env.log_level('LOG_LEVEL', logging.DEBUG))
         if not env('NO_DB', False) and not no_db and models:  # TODO: shit
-            app.config['DATABASE'] = env.str('DATABASE_URL', 'postgres://postgres@localhost:5432/wol')
-            models.db.init_app(app)
+            app.config['DATABASE'] = env.str('DATABASE_URL', 'sqlite://sqlite.db')
+            FlaskDB(app, models.db)
             app.register_blueprint(crud, url_prefix='/api')
             app.register_blueprint(pages)
 
